@@ -58,7 +58,7 @@
     TableColumn,
     Pagination
   } from 'element-ui'
-  import Layout from '../../components/layout'
+  import Layout from '../../components/Layout'
   import OrderGoods from '../../db/order_goods'
   import Moment from 'moment'
   import Decimal from 'decimal.js'

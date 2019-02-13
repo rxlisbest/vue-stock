@@ -73,7 +73,7 @@
     TableColumn,
     Pagination
   } from 'element-ui'
-  import Layout from '../../components/layout'
+  import Layout from '../../components/Layout'
   import Goods from '../../db/goods'
 
   export default {

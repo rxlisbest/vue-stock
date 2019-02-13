@@ -70,7 +70,7 @@
     TableColumn,
     Pagination
   } from 'element-ui'
-  import Layout from '../../components/layout'
+  import Layout from '../../components/Layout'
   import Order from '../../db/order'
   import User from '../../db/user'
   import Moment from 'moment'

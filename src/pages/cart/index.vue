@@ -221,9 +221,6 @@
 </script>
 
 <style>
-.el-menu {
-  height: 560px;
-}
 .el-row {
     margin-bottom: 20px;
     &:last-child {

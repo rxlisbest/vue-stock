@@ -59,7 +59,7 @@
     TableColumn,
     Pagination
   } from 'element-ui'
-  import Layout from '../../components/layout'
+  import Layout from '../../components/Layout'
   import Category from '../../db/category'
   import Goods from '../../db/goods'
 
