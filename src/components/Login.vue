@@ -36,7 +36,7 @@
                   <el-input></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="submitForm('numberValidateForm')">提交</el-button>
+                  <el-button type="primary" @click="submitForm()">提交</el-button>
                   <el-button @click="resetForm('numberValidateForm')">重置</el-button>
                 </el-form-item>
               </el-form>
@@ -56,6 +56,20 @@ export default {
   data() {
   	return {
       form: {}
+    }
+  },
+  methods: {
+    submitForm () {
+      this.axios.post(this.api.login.index, {
+        username: 'Fred',
+        password: 'Flintstone'
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
   }
 }

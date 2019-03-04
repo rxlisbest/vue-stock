@@ -7,6 +7,12 @@ import Element from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(Element, { size: 'small', zIndex: 3000 })
 
+import axios from 'axios'
+Vue.prototype.axios = axios
+
+import api from './api'
+Vue.prototype.api = api
+
 Vue.config.productionTip = false
 
 new Vue({
