@@ -30,10 +30,10 @@
             <div>
               <el-form class="admin-login-form" ref="form" :model="form" label-width="60px" size="medium">
                 <el-form-item label="用户名">
-                  <el-input></el-input>
+                  <el-input v-model="form.username"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
-                  <el-input></el-input>
+                  <el-input type="password" v-model="form.password"></el-input>
                 </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="submitForm()">提交</el-button>
@@ -53,23 +53,30 @@ export default {
   name: 'login',
   components: {
   },
+  created () {
+    let access_token = localStorage.getItem('access_token')
+    if (access_token != undefined && access_token.length  > 0) {
+      this.$router.push({name: 'index-index'})
+      localStorage.removeItem('userinfo')
+    }
+  },
   data() {
   	return {
-      form: {}
+      form: {
+        username: '',
+        password: ''
+      }
     }
   },
   methods: {
     submitForm () {
-      this.axios.post(this.api.login.index, {
-        username: 'Fred',
-        password: 'Flintstone'
-      })
+      this.axios.post(this.api.login.index, this.form)
       .then(function (response) {
-        console.log(response);
+        localStorage.setItem("access_token", response.data)
       })
       .catch(function (error) {
-        console.log(error);
-      });
+        console.log(error.response.data.message)
+      })
     }
   }
 }
