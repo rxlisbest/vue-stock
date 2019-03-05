@@ -21,11 +21,11 @@
     <el-container>
       <el-aside width="200px">
         <el-menu :default-active="index" class="el-menu-vertical-demo"  @select="handleSelect" :collapse="false">
-          <el-menu-item index="index">首页</el-menu-item>
-          <el-menu-item index="categories">分类管理</el-menu-item>
-          <el-menu-item index="goods">商品管理</el-menu-item>
-          <el-menu-item index="users">客户管理</el-menu-item>
-          <el-menu-item index="orders">订单管理</el-menu-item>
+          <el-menu-item index="index">{{$t('messages.tab.index')}}</el-menu-item>
+          <el-menu-item index="categories">{{$t('messages.tab.categories')}}</el-menu-item>
+          <el-menu-item index="goods">{{$t('messages.tab.goods')}}</el-menu-item>
+          <el-menu-item index="users">{{$t('messages.tab.buyers')}}</el-menu-item>
+          <el-menu-item index="orders">{{$t('messages.tab.orders')}}</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>

@@ -4,8 +4,8 @@
       <el-row>
         <el-col :span="18">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'categories-index' }">分类管理</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">{{$t('messages.tab.index')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'categories-index' }">{{$t('messages.tab.categories')}}</el-breadcrumb-item>
             <el-breadcrumb-item :to="{ name: 'categories-index' }">列表</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
@@ -85,6 +85,7 @@
       }
     },
     created () {
+      console.log(this.$t('messages.tab.index'))
       this.handleCurrentChange()
     },
     methods: {
@@ -93,9 +94,9 @@
       },
       del (id) {
         var _this = this
-        _this.$confirm('确定删除这条记录?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        _this.$confirm(this.$t('messages.confirm.delete.message'), this.$t('messages.confirm.delete.title'), {
+          confirmButtonText: this.$t('messages.confirm.delete.confirmButtonText'),
+          cancelButtonText: this.$t('messages.confirm.delete.cancelButtonText'),
           type: 'warning'
         }).then(() => {
           this.axios.delete(this.api.goods_categories.delete + id)
@@ -126,7 +127,6 @@
         let _this = this
         this.axios.get(this.api.goods_categories.index, {params: {page: page}})
         .then(function (response) {
-          console.log(response.data)
           let _data = response.data
           _this.tableData = _data.list
           _this.pagination.pages = _data.pages
