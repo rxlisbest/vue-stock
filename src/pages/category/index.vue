@@ -60,8 +60,6 @@
     Pagination
   } from 'element-ui'
   import Layout from '../../components/Layout'
-  import Category from '../../db/category'
-  import Goods from '../../db/goods'
 
   export default {
     name: 'landing-page',
@@ -100,34 +98,19 @@
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          new Promise((resolve, reject) => {
-            let o = {where: {category_id: id}}
-            Goods.all(o, (err, rows) => {
-              if (err === null && rows.length <= 0) {
-                resolve()
-              } else {
-                reject(err || '分类下有商品，不能删除！')
-              }
+          this.axios.delete(this.api.goods_categories.delete + id)
+          .then(function (response) {
+            _this.$message({
+              type: 'success',
+              message: '删除成功!'
             })
-          }).then(() => {
-            Category.del({id: id}, function (err, rows) {
-              if (err === null) {
-                _this.$message({
-                  type: 'success',
-                  message: '删除成功!'
-                })
-                _this.handleCurrentChange(1)
-              } else {
-                _this.$message.error(err)
-              }
+            _this.handleCurrentChange ()
+          })
+          .catch(function (error) {
+            _this.$message({
+              type: 'error',
+              message: error.response.data.message
             })
-          }).catch((err) => {
-            if (err !== null) {
-              _this.$message({
-                type: 'error',
-                message: err
-              })
-            }
           })
         }).catch(() => {
           _this.$message({
@@ -140,26 +123,24 @@
         this.$router.push({name: 'categories-edit', params: {id: id}})
       },
       handleCurrentChange (page) {
-        this.axios.get(this.api.goods_categories.index)
+        let _this = this
+        this.axios.get(this.api.goods_categories.index, {params: {page: page}})
         .then(function (response) {
-          console.log(response)
+          console.log(response.data)
+          let _data = response.data
+          _this.tableData = _data.list
+          _this.pagination.pages = _data.pages
+          _this.pagination.count = _data.total
+          _this.pagination.page = _data.pageNum
+          _this.pagination.pageSize = _data.pageSize
         })
         .catch(function (error) {
-          console.log(error.response.data.message)
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
         return false
-        let _this = this
-        let o = {}
-        o.order = 'id DESC'
-        o.pageSize = this.pagination.pageSize
-        o.page = page || this.pagination.page
-        Category.pagination(o, function (data) {
-          _this.tableData = data.list
-          _this.pagination.pages = data.pages
-          _this.pagination.count = data.count
-          _this.pagination.page = data.page
-          _this.pagination.pageSize = data.pageSize
-        })
       }
     }
   }

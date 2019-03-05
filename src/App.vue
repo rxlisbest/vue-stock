@@ -26,7 +26,7 @@ export default {
       this.axios.interceptors.response.use(function (response) {
         if (response.status == HttpStatus.UNAUTHORIZED) {
           localStorage.removeItem('access_token')
-          this.$router.push({name: 'login'})
+          _this.$router.push({name: 'login'})
         }
         return response
       }, function (error) {
