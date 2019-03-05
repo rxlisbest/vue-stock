@@ -59,27 +59,9 @@
     ],
     mounted () {
       let access_token = localStorage.getItem('access_token')
-      if (access_token == undefined || access.length == 0) {
+      if (access_token == undefined || access_token.length == 0) {
         this.$router.push({name: 'login'})
       }
-      // 添加请求拦截器
-      this.axios.interceptors.request.use(function (config) {
-        // 在发送请求之前做些什么
-        console.log(config)
-        return config;
-      }, function (error) {
-        // 对请求错误做些什么
-        return Promise.reject(error);
-      });
-
-      // 添加响应拦截器
-      this.axios.interceptors.response.use(function (response) {
-        return response
-      }, function (error) {
-        console.log(error.response.status)
-        // 对响应错误做点什么
-        return Promise.reject(error)
-      });
     },
     data () {
       return {

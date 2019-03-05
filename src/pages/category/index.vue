@@ -140,6 +140,14 @@
         this.$router.push({name: 'categories-edit', params: {id: id}})
       },
       handleCurrentChange (page) {
+        this.axios.get(this.api.goods_categories.index)
+        .then(function (response) {
+          console.log(response)
+        })
+        .catch(function (error) {
+          console.log(error.response.data.message)
+        })
+        return false
         let _this = this
         let o = {}
         o.order = 'id DESC'
