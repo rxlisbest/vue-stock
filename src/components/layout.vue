@@ -24,7 +24,7 @@
           <el-menu-item index="index">{{$t('messages.tab.index')}}</el-menu-item>
           <el-menu-item index="categories">{{$t('messages.tab.categories')}}</el-menu-item>
           <el-menu-item index="goods">{{$t('messages.tab.goods')}}</el-menu-item>
-          <el-menu-item index="users">{{$t('messages.tab.buyers')}}</el-menu-item>
+          <el-menu-item index="buyers">{{$t('messages.tab.buyers')}}</el-menu-item>
           <el-menu-item index="orders">{{$t('messages.tab.orders')}}</el-menu-item>
         </el-menu>
       </el-aside>

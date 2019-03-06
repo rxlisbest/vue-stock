@@ -1,25 +1,25 @@
 <template>
-  <layout index="users">
+  <layout index="buyers">
     <template slot="body">
       <el-row>
         <el-col :span="18">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'users-index' }">客户管理</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'users-add' }">新增</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">{{$t('messages.tab.index')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'buyers-index' }">{{$t('messages.tab.buyers')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'buyers-add' }">{{$t('messages.crumb.edit')}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
       </el-row>
       
       <el-form ref="ruleForm" :model="form" :rules="rules" label-width="80px" class="demo-ruleForm">
-        <el-form-item prop="name" label="客户名称">
+        <el-form-item prop="name" :label="$t('messages.form.label.buyers.name')">
           <el-col :span="8">
             <el-input v-model="form.name"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">提交</el-button>
-          <el-button @click="onCancle">取消</el-button>
+          <el-button type="primary" @click="onSubmit">{{$t('messages.form.button.submit')}}</el-button>
+          <el-button @click="onCancle">{{$t('messages.form.button.cancel')}}</el-button>
         </el-form-item>
       </el-form>
     </template>
@@ -40,15 +40,8 @@
   } from 'element-ui'
   import Layout from '../../components/Layout'
 
-  import User from '../../db/user'
-  // User.all(function (err, rows) {
-  //   console.log(err)
-  //   console.log(rows)
-  // })
-  // User.edit({name: 'test', create_time: 1234567890}, {name: 'test123', create_time: 1234567890})
-
   export default {
-    name: 'landing-page',
+    name: 'buyers-edit',
     components: {
       Container,
       Header,
@@ -67,27 +60,31 @@
     data () {
       let _this = this
       function repeatName (rule, value, callback) {
-        User.all({where: {name: value, id: ['<>', _this.$route.params.id]}}, function (err, rows) {
-          if (err !== null) {
-            callback(new Error(err))
-          }
-          if (rows.length > 0) {
+        _this.axios.get(_this.api.buyers.repeat, {params: {name: value, id: _this.$route.query.id}})
+        .then(function (response) {
+          let _data = response.data
+          if (_data.length > 0) {
             callback(new Error())
           } else {
             callback()
           }
         })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
+        })
       }
       return {
         form: {
-          id: 0,
           name: '',
           create_time: 0
         },
         rules: {
           name: [
-            { required: true, message: '请输入客户名称', trigger: 'blur' },
-            { validator: repeatName, message: '客户名称重复', trigger: 'blur' }
+            { required: true, message: _this.$t('messages.form.rule.buyers.name.required'), trigger: 'blur' },
+            { validator: repeatName, message: _this.$t('messages.form.rule.buyers.name.repeat'), trigger: 'blur' }
           ]
         }
       }
@@ -97,13 +94,15 @@
         let _this = this
         _this.$refs.ruleForm.validate((valid) => {
           if (valid) {
-            _this.form.create_time = new Date().getTime()
-            User.edit({id: _this.form.id}, _this.form, function (err, rows) {
-              if (err === null) {
-                _this.$router.push({name: 'users-index'})
-              } else {
-                console.error(err)
-              }
+            this.axios.put(this.api.buyers.update + _this.form.id, _this.form)
+            .then(function (response) {
+              _this.$router.push({name: 'buyers-index'})
+            })
+            .catch(function (error) {
+              _this.$message({
+                type: 'error',
+                message: error.response.data.message
+              })
             })
           }
         })
@@ -113,15 +112,17 @@
       },
       handleInfo () {
         let _this = this
-        let id = _this.$route.params.id
-        let o = {}
-        o.where = {id: id}
-        User.get(o, function (err, row) {
-          if (err === null) {
-            _this.form = row
-          } else {
-            _this.$message.error(err)
-          }
+        let id = _this.$route.query.id
+        _this.axios.get(_this.api.buyers.view + id)
+        .then(function (response) {
+          let _data = response.data
+          _this.form = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       }
     }

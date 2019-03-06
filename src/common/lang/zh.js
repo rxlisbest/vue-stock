@@ -5,6 +5,7 @@ export const messages = {
     add: "新增",
     view: "详情",
     storage: "入库",
+    out_of_stock: "出库",
   },
   operation: {
     add: "新增",
@@ -12,6 +13,7 @@ export const messages = {
     delete: "删除",
     view: "详情",
     storage: "入库",
+    out_of_stock: "出库",
     back: "返回",
   },
   tab: {
@@ -58,7 +60,11 @@ export const messages = {
     },
     goods_logs: {
       amount: "入库数量"
-    }
+    },
+    buyers: {
+      name: "名称",
+      operation: "操作",
+    },
   },
   form: {
     label: {
@@ -73,7 +79,10 @@ export const messages = {
         amount: '库存',
         unit: '单位',
         unit_description: '（例：千克、个... ...）'
-      }
+      },
+      buyers: {
+        name: '客户名称'
+      },
     },
     button: {
       submit: '提交',
@@ -103,7 +112,13 @@ export const messages = {
         unit: {
           required: '请输入单位'
         }
-      }
+      },
+      buyers: {
+        name: {
+          required: '请输入客户名称',
+          repeat: '客户名称重复',
+        }
+      },
     }
   }
 }

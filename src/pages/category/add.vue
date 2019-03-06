@@ -96,7 +96,10 @@
               _this.$router.push({name: 'categories-index'})
             })
             .catch(function (error) {
-              _this.$router.push({name: 'categories-index'})
+              _this.$message({
+                type: 'error',
+                message: error.response.data.message
+              })
             })
           }
         })

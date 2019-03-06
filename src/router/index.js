@@ -76,19 +76,19 @@ export default new Router({
       component: require('@/pages/order/print').default
     },
     {
-      path: '/users',
-      name: 'users-index',
-      component: require('@/pages/user/index').default
+      path: '/buyers',
+      name: 'buyers-index',
+      component: require('@/pages/buyer/index').default
     },
     {
-      path: '/users/add',
-      name: 'users-add',
-      component: require('@/pages/user/add').default
+      path: '/buyers/add',
+      name: 'buyers-add',
+      component: require('@/pages/buyer/add').default
     },
     {
-      path: '/users/edit',
-      name: 'users-edit',
-      component: require('@/pages/user/edit').default
+      path: '/buyers/edit',
+      name: 'buyers-edit',
+      component: require('@/pages/buyer/edit').default
     },
     {
       path: '*',

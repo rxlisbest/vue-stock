@@ -25,5 +25,14 @@ export default {
     index: domain + '/goods_logs/index',
     create: domain + '/goods_logs/create',
     delete: domain + '/goods_logs/delete/',
-  }
+  },
+  buyers: {
+    all: domain + '/buyers/all',
+    index: domain + '/buyers/index',
+    view: domain + '/buyers/view/',
+    create: domain + '/buyers/create',
+    update: domain + '/buyers/update/',
+    delete: domain + '/buyers/delete/',
+    repeat: domain + '/buyers/repeat',
+  },
 }
