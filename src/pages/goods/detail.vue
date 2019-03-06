@@ -4,18 +4,18 @@
       <el-row>
         <el-col :span="18">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'goods-index' }">商品管理</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'goods-index' }">详情</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">{{$t('messages.tab.index')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'goods-index' }">{{$t('messages.tab.goods')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'goods-index' }">{{$t('messages.crumb.view')}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
         <el-col :span="6" class="el-col-button">
-          <el-button type="primary" icon="el-icon-back" @click="goBack()" title="返回"></el-button>
+          <el-button type="primary" icon="el-icon-back" @click="goBack()" :title="$t('messages.operation.back')"></el-button>
         </el-col>
       </el-row>
 
       <el-table
-        :data="list"
+        :data="tableData"
         stripe
         style="width: 100%">
         <el-table-column
@@ -23,28 +23,28 @@
           width="80">
         </el-table-column>
         <el-table-column
-          label="名称">
+          :label="$t('messages.column.goods.name')">
           <template slot-scope="scope">
             {{goods.name}}
           </template>
         </el-table-column>
         <el-table-column
-          label="单价">
+          :label="$t('messages.column.goods.price')">
           <template slot-scope="scope">
             ￥{{scope.row.price.toFixed(2)}} / {{goods.unit}}
           </template>
         </el-table-column>
         <el-table-column
-          label="入库数量">
+          :label="$t('messages.column.goods_logs.amount')">
           <template slot-scope="scope">
             {{scope.row.amount}} {{scope.row.unit}}
           </template>
         </el-table-column>
         <el-table-column
           width="60"
-          label="操作">
+          :label="$t('messages.column.goods.operation')">
           <template slot-scope="scope">
-            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" circle title="删除"></el-button>
+            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" circle :title="$t('messages.operation.delete')"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -73,11 +73,9 @@
     Pagination
   } from 'element-ui'
   import Layout from '../../components/Layout'
-  import GoodsLog from '../../db/goods_log'
-  import Goods from '../../db/goods'
 
   export default {
-    name: 'landing-page',
+    name: 'goods-detail',
     components: {
       Container,
       Header,
@@ -92,7 +90,7 @@
     data () {
       return {
         goods: {},
-        list: [],
+        tableData: [],
         pagination: {
           page: 1,
           pageSize: 8,
@@ -109,52 +107,65 @@
         this.$router.push(link)
       },
       del (id) {
-        var _this = this
-        this.$confirm('删除入库记录后，商品的库存会减少相应数量！确定删除入库记录?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        let _this = this
+        _this.$confirm(_this.$t('messages.confirm.goods_logs_delete.message'), _this.$t('messages.confirm.goods_logs_delete.title'), {
+          confirmButtonText: _this.$t('messages.confirm.goods_logs_delete.confirmButtonText'),
+          cancelButtonText: _this.$t('messages.confirm.goods_logs_delete.cancelButtonText'),
           type: 'warning'
         }).then(() => {
-          Goods.delGoodsLog(id, function () {
+          _this.axios.delete(_this.api.goods_logs.delete + id)
+          .then(function (response) {
             _this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: _this.$t('messages.message.goods_logs_delete.success')
             })
-            _this.handleCurrentChange(1)
+            _this.handleCurrentChange ()
+          })
+          .catch(function (error) {
+            _this.$message({
+              type: 'error',
+              message: error.response.data.message
+            })
           })
         }).catch(() => {
-          this.$message({
+          _this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: _this.$t('messages.message.goods_logs_delete.cancel')
           })
         })
       },
-      handleInfo (page) {
+      handleInfo () {
         let _this = this
         let id = _this.$route.query.id
-        let o = {}
-        o.where = {id: id}
-        Goods.get(o, function (err, row) {
-          if (err === null) {
-            _this.goods = row
-          } else {
-            console.error(err)
-          }
+        _this.axios.get(_this.api.goods.view + id)
+        .then(function (response) {
+          let _data = response.data
+          _this.goods = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
       handleCurrentChange (page) {
         let _this = this
-        let o = {}
-        o.order = 'id DESC'
-        o.where = {goods_id: _this.$route.query.id}
-        o.pageSize = this.pagination.pageSize
-        o.page = page || this.pagination.page
-        GoodsLog.pagination(o, function (data) {
-          _this.list = data.list
-          _this.pagination.pages = data.pages
-          _this.pagination.count = data.count
-          _this.pagination.page = data.page
-          _this.pagination.pageSize = data.pageSize
+        let id = _this.$route.query.id
+        _this.axios.get(_this.api.goods_logs.index, {params: {page: page, goods_id: id}})
+        .then(function (response) {
+          let _data = response.data
+          _this.tableData = _data.list
+          _this.pagination.pages = _data.pages
+          _this.pagination.count = _data.total
+          _this.pagination.page = _data.pageNum
+          _this.pagination.pageSize = _data.pageSize
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
       goBack () {

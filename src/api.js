@@ -20,5 +20,10 @@ export default {
     update: domain + '/goods/update/',
     delete: domain + '/goods/delete/',
     repeat: domain + '/goods/repeat',
+  },
+  goods_logs: {
+    index: domain + '/goods_logs/index',
+    create: domain + '/goods_logs/create',
+    delete: domain + '/goods_logs/delete/',
   }
 }

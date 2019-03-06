@@ -4,28 +4,28 @@
       <el-row>
         <el-col :span="18">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'goods-index' }">商品管理</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'goods-amount' }">入库</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">{{$t('messages.tab.index')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'goods-index' }">{{$t('messages.tab.goods')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'goods-amount' }">{{$t('messages.crumb.storage')}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
       </el-row>
       
       <el-form ref="ruleForm" :model="form" :rules="rules" label-width="80px" class="demo-ruleForm">
-        <el-form-item prop="name" label="商品名称">
+        <el-form-item prop="name" :label="$t('messages.form.label.goods.name')">
           <el-col :span="8">
             <el-input v-model="form.name" :disabled="true"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item prop="price" label="单价">
+        <el-form-item prop="price" :label="$t('messages.form.label.goods.price')">
           <el-input-number v-model="form.price" :precision="2" :step="1" :min="0"></el-input-number>
         </el-form-item>
-        <el-form-item prop="amount" label="库存">
+        <el-form-item prop="amount" :label="$t('messages.form.label.goods.amount')">
           <el-input-number v-model="form.amount" :precision="2" :step="1" :min="0"></el-input-number>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">提交</el-button>
-          <el-button @click="onCancle">取消</el-button>
+          <el-button type="primary" @click="onSubmit">{{$t('messages.form.button.submit')}}</el-button>
+          <el-button @click="onCancle">{{$t('messages.form.button.cancel')}}</el-button>
         </el-form-item>
       </el-form>
     </template>
@@ -46,8 +46,6 @@
   } from 'element-ui'
   import Layout from '../../components/Layout'
 
-  import Goods from '../../db/goods'
-
   export default {
     name: 'landing-page',
     components: {
@@ -66,6 +64,7 @@
       this.handleInfo()
     },
     data () {
+      let _this = this
       return {
         form: {
           id: 0,
@@ -76,11 +75,11 @@
         categories: [],
         rules: {
           price: [
-            { required: true, message: '请输入单价', trigger: 'blur' }
+            { required: true, message: _this.$t('messages.form.rule.goods.price.required'), trigger: 'blur' }
           ],
           amount: [
-            { required: true, message: '请输入库存', trigger: 'blur' }
-          ]
+            { required: true, message: _this.$t('messages.form.rule.goods.amount.required'), trigger: 'blur' }
+          ],
         }
       }
     },
@@ -89,14 +88,14 @@
         let _this = this
         _this.$refs.ruleForm.validate((valid) => {
           if (valid) {
-            Goods.addGoodsLog(_this.form, function () {
+            this.axios.post(this.api.goods_logs.create, _this.form)
+            .then(function (response) {
+              _this.$router.push({name: 'goods-index'})
+            })
+            .catch(function (error) {
               _this.$message({
-                type: 'success',
-                message: '入库成功!',
-                duration: 1000,
-                onClose: () => {
-                  _this.$router.push({name: 'goods-index'})
-                }
+                type: 'error',
+                message: error.response.data.message
               })
             })
           }
@@ -108,15 +107,17 @@
       handleInfo () {
         let _this = this
         let id = _this.$route.query.id
-        let o = {}
-        o.where = {id: id}
-        Goods.get(o, function (err, row) {
-          if (err === null) {
-            _this.form.name = row.name
-            _this.form.id = row.id
-          } else {
-            _this.$message.error(err)
-          }
+        _this.axios.get(_this.api.goods.view + id)
+        .then(function (response) {
+          let _data = response.data
+          _this.form.name = _data.name
+          _this.form.goods_id = id
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       }
     }

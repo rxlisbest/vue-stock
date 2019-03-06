@@ -2,7 +2,9 @@ export const messages = {
   crumb: {
     list: "列表",
     edit: "编辑",
-    add: "新增"
+    add: "新增",
+    view: "详情",
+    storage: "入库",
   },
   operation: {
     add: "新增",
@@ -10,6 +12,7 @@ export const messages = {
     delete: "删除",
     view: "详情",
     storage: "入库",
+    back: "返回",
   },
   tab: {
     index: '首页',
@@ -22,12 +25,22 @@ export const messages = {
     delete: {
       cancel: '已取消删除',
       success: '删除成功'
+    },
+    goods_logs_delete: {
+      cancel: '已取消删除',
+      success: '删除成功'
     }
   },
   confirm: {
     delete: {
       title: '提示',
       message: '确定删除这条记录?',
+      confirmButtonText: '提示',
+      cancelButtonText: '取消',
+    },
+    goods_logs_delete: {
+      title: '提示',
+      message: '删除入库记录后，商品的库存会减少相应数量！确定删除入库记录?',
       confirmButtonText: '提示',
       cancelButtonText: '取消',
     }
@@ -42,6 +55,9 @@ export const messages = {
       price: "单价",
       amount: "库存",
       operation: "操作",
+    },
+    goods_logs: {
+      amount: "入库数量"
     }
   },
   form: {
