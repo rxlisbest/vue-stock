@@ -39,7 +39,11 @@ export default {
   },
   orders: {
     index: domain + '/orders/index',
+    view: domain + '/orders/view/',
     create: domain + '/orders/create',
     delete: domain + '/orders/delete/',
+  },
+  order_goods: {
+    all: domain + '/order_goods/all',
   },
 }

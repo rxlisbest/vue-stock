@@ -12,12 +12,12 @@
       <div @click="showButton(true)">
         <el-row class="el-row-bottom-0">
           <el-col :span="24">
-            客户：{{user.name}}
+            客户：{{buyer.name}}
           </el-col>
         </el-row>
         <el-row class="el-row-bottom-0">
           <el-col :span="24">
-            时间：{{Moment(order.create_time).format("YYYY-MM-DD HH:mm:ss")}}
+            时间：{{Moment(order.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}}
           </el-col>
         </el-row>
         <el-row class="el-row-bottom-0">
@@ -84,11 +84,11 @@
         list: [],
         id: 0,
         order: {
-          user_id: 0,
+          buyer_id: 0,
           total: 0.00,
           create_time: 0
         },
-        user: {
+        buyer: {
           name: '',
           phone: ''
         },
@@ -97,44 +97,50 @@
     },
     methods: {
       Moment: Moment,
-      handleCurrentChange (page) {
+      handleCurrentChange () {
         let _this = this
         let id = _this.$route.query.id
-        let o = {}
-        o.where = {order_id: id}
-        o.order = 'id DESC'
-        OrderGoods.all(o, function (err, rows) {
-          if (err === null) {
-            _this.list = rows
-          } else {
-            console.error(err)
-          }
+        _this.axios.get(_this.api.order_goods.all, {params: {order_id: id}})
+        .then(function (response) {
+          let _data = response.data
+          _this.list = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
       handleInfo () {
         let _this = this
         let id = _this.$route.query.id
-        let o = {}
-        o.where = {id: id}
-        Order.get(o, function (err, row) {
-          if (err === null) {
-            _this.order = row
-            _this.handleUser(row.user_id)
-          } else {
-            console.error(err)
-          }
+        _this.axios.get(_this.api.orders.view + id)
+        .then(function (response) {
+          let _data = response.data
+          _this.order = _data
+          _this.handleBuyer(_data.buyer_id)
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
-      handleUser (userId) {
+      handleBuyer (buyerId) {
         let _this = this
-        let o = {}
-        o.where = {id: userId}
-        User.get(o, function (err, row) {
-          if (err === null) {
-            _this.user = row
-          } else {
-            console.error(err)
-          }
+        let id = _this.$route.query.id
+        _this.axios.get(_this.api.buyers.view + buyerId)
+        .then(function (response) {
+          let _data = response.data
+          _this.buyer = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
       getTotal () {
