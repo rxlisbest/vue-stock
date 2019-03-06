@@ -15,6 +15,8 @@ export const messages = {
     storage: "入库",
     out_of_stock: "出库",
     back: "返回",
+    balance: "结算",
+    total: "合计",
   },
   tab: {
     index: '首页',
@@ -31,19 +33,31 @@ export const messages = {
     goods_logs_delete: {
       cancel: '已取消删除',
       success: '删除成功'
+    },
+    cart: {
+      cancel: '已取消结算',
+      success: '结算成功',
+      empty: '结算商品数量为0',
+      goods_add_already: '已添加'
     }
   },
   confirm: {
     delete: {
       title: '提示',
       message: '确定删除这条记录?',
-      confirmButtonText: '提示',
+      confirmButtonText: '确定',
       cancelButtonText: '取消',
     },
     goods_logs_delete: {
       title: '提示',
       message: '删除入库记录后，商品的库存会减少相应数量！确定删除入库记录?',
-      confirmButtonText: '提示',
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+    },
+    cart: {
+      title: '提示',
+      message: '确定结算?',
+      confirmButtonText: '确定',
       cancelButtonText: '取消',
     }
   },
@@ -65,6 +79,9 @@ export const messages = {
       name: "名称",
       operation: "操作",
     },
+    cart: {
+      amount: "数量"
+    }
   },
   form: {
     label: {

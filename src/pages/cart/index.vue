@@ -1,5 +1,5 @@
 <template>
-  <el-container style="height: 560px;">
+  <el-container style="min-height: 560px;height: 100%;">
     <el-col :span="6">
       <div class="category">
         <el-menu :default-openeds="['1', '2']">
@@ -22,28 +22,28 @@
           :data="cart"
           style="width: 100%">
           <el-table-column
-            label="名称" prop="name">
+            :label="$t('messages.column.goods.name')" prop="name">
           </el-table-column>
           <el-table-column
-            label="单价" width="140">
+            :label="$t('messages.column.goods.price')" width="140">
             <template slot-scope="scope">
               <el-input-number controls-position="right" v-model="scope.row.price" size="mini" :min="0"></el-input-number>
             </template>
           </el-table-column>
           <el-table-column
-            label="库存" width="60">
+            :label="$t('messages.column.goods.amount')" width="60">
             <template slot-scope="scope">
               {{scope.row.amount}} {{scope.row.unit}}
             </template>
           </el-table-column>
-          <el-table-column label="数量" width="140">
+          <el-table-column :label="$t('messages.column.cart.amount')"  width="140">
             <template slot-scope="scope">
               <el-input-number controls-position="right" v-model="scope.row.order_amount" size="mini" :min="0" :max="scope.row.amount"></el-input-number>
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="60" type=index>
+          <el-table-column :label="$t('messages.column.goods.operation')" width="60" type=index>
             <template slot-scope="scope">
-              <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="delCart(scope.$index)"></el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="delCart(scope.$index)" :title="$t('messages.operation.balance')">{{$t('messages.operation.delete')}}></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -51,16 +51,16 @@
       <div class="cart-total">
         <el-row type="flex" class="row-bg" justify="space-between" style="height: 100%;">
           <el-col :span="4" class="cart-total-col">
-            合计
+            {{$t('messages.operation.total')}}
           </el-col>
           <el-col :span="12" class="cart-total-col">
             ￥{{ order.total.toFixed(2) }}
           </el-col>
           <el-col :span="4" class="cart-total-col">
-            <el-button type="primary" icon="el-icon-back" @click="goBack()"></el-button>
+            <el-button type="primary" icon="el-icon-back" @click="goBack()" :title="$t('messages.operation.back')"></el-button>
           </el-col>
           <el-col :span="4" class="cart-total-col">
-            <el-button type="danger" @click="addOrder">结算</el-button>
+            <el-button type="danger" @click="addOrder" :title="$t('messages.operation.balance')">{{$t('messages.operation.balance')}}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -157,10 +157,11 @@
         })
       },
       addCart (goods) {
+        let _this = this
         goods = JSON.parse(JSON.stringify(goods))
-        for (let v of this.cart) {
+        for (let v of _this.cart) {
           if (v.id === goods.id) {
-            this.$message.warning('已添加')
+            _this.$message.warning(_this.$t('messages.message.cart.goods_add_already'))
             return false
           }
         }
@@ -189,15 +190,15 @@
       },
       addOrder () {
         let _this = this
-        _this.$confirm('确定结算?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        _this.$confirm(_this.$t('messages.confirm.cart.message'), _this.$t('messages.confirm.cart.title'), {
+          confirmButtonText: _this.$t('messages.confirm.cart.confirmButtonText'),
+          cancelButtonText: _this.$t('messages.confirm.cart.cancelButtonText'),
           type: 'warning'
         }).then(() => {
           if (_this.amount <= 0) {
             _this.$message({
               type: 'error',
-              message: '结算商品数量为0!'
+              message: _this.$t('messages.message.cart.empty')
             })
             return false
           }
@@ -206,7 +207,7 @@
             let orderId = response.data
             _this.$message({
               type: 'success',
-              message: '结算成功!',
+              message: _this.$t('messages.message.cart.success'),
               duration: 1000,
               onClose: () => {
                 _this.$router.push({name: 'orders-print', query: {id: orderId}})
@@ -219,20 +220,10 @@
               message: error.response.data.message
             })
           })
-          // Order.addOrder(_this.order, _this.cart, (orderId) => {
-          //   _this.$message({
-          //     type: 'success',
-          //     message: '结算成功!',
-          //     duration: 1000,
-          //     onClose: () => {
-          //       _this.$router.push({name: 'orders-print', query: {id: orderId}})
-          //     }
-          //   })
-          // })
         }).catch(() => {
           _this.$message({
             type: 'info',
-            message: '已取消结算'
+            message: _this.$t('messages.message.cart.cancel')
           })
         })
       },
