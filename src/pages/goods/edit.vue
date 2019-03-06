@@ -4,21 +4,21 @@
       <el-row>
         <el-col :span="18">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'goods-index' }">商品管理</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'goods-add' }">新增</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">{{$t('messages.tab.index')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'goods-index' }">{{$t('messages.tab.goods')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'goods-edit' }">{{$t('messages.crumb.edit')}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
       </el-row>
       
       <el-form ref="ruleForm" :model="form" :rules="rules" label-width="80px" class="demo-ruleForm">
-        <el-form-item prop="name" label="商品名称">
+        <el-form-item prop="name" :label="$t('messages.form.label.goods.name')">
           <el-col :span="8">
             <el-input v-model="form.name"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item prop="category_id" label="分类">
-          <el-select v-model="form.category_id" placeholder="请选择">
+        <el-form-item prop="goods_category_id" :label="$t('messages.form.label.goods.goods_category_id')">
+          <el-select v-model="form.goods_category_id" :placeholder="$t('messages.form.label.goods.goods_category_id_placeholder')">
             <el-option
               v-for="item in categories"
               :key="item.id"
@@ -27,20 +27,20 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item prop="price" label="单价">
+        <el-form-item prop="price" :label="$t('messages.form.label.goods.price')">
           <el-input-number v-model="form.price" :precision="2" :step="1" :min="0"></el-input-number>
         </el-form-item>
-        <el-form-item prop="amount" label="库存">
+        <el-form-item prop="amount" :label="$t('messages.form.label.goods.amount')">
           <el-input-number v-model="form.amount" :precision="2" :step="1" :min="0"></el-input-number>
         </el-form-item>
-        <el-form-item prop="unit" label="单位">
+        <el-form-item prop="unit" :label="$t('messages.form.label.goods.unit')">
           <el-col :span="3">
             <el-input v-model="form.unit"></el-input>
-          </el-col>（例：千克、个... ...）
+          </el-col>{{$t('messages.form.label.goods.unit_description')}}
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit">提交</el-button>
-          <el-button @click="onCancle">取消</el-button>
+          <el-button type="primary" @click="onSubmit">{{$t('messages.form.button.submit')}}</el-button>
+          <el-button @click="onCancle">{{$t('messages.form.button.cancel')}}</el-button>
         </el-form-item>
       </el-form>
     </template>
@@ -60,9 +60,6 @@
     Button
   } from 'element-ui'
   import Layout from '../../components/Layout'
-
-  import Goods from '../../db/goods'
-  import Category from '../../db/category'
 
   export default {
     name: 'landing-page',
@@ -85,15 +82,20 @@
     data () {
       let _this = this
       function repeatName (rule, value, callback) {
-        Goods.all({where: {name: value, id: ['<>', _this.$route.params.id]}}, function (err, rows) {
-          if (err !== null) {
-            callback(new Error(err))
-          }
-          if (rows.length > 0) {
+        _this.axios.get(_this.api.goods.repeat, {params: {name: value, id: _this.$route.query.id}})
+        .then(function (response) {
+          let _data = response.data
+          if (_data.length > 0) {
             callback(new Error())
           } else {
             callback()
           }
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       }
       return {
@@ -104,20 +106,20 @@
         categories: [],
         rules: {
           name: [
-            { required: true, message: '请输入商品名称', trigger: 'blur' },
-            { validator: repeatName, message: '商品名称重复', trigger: 'blur' }
+            { required: true, message: _this.$t('messages.form.rule.goods.name.required'), trigger: 'blur' },
+            { validator: repeatName, message: _this.$t('messages.form.rule.goods.name.repeat'), trigger: 'blur' }
           ],
-          category_id: [
-            { required: true, message: '请选择分类', trigger: 'change' }
+          goods_category_id: [
+            { required: true, message: _this.$t('messages.form.rule.goods.goods_category_id.required'), trigger: 'change' }
           ],
           price: [
-            { required: true, message: '请输入单价', trigger: 'blur' }
+            { required: true, message: _this.$t('messages.form.rule.goods.price.required'), trigger: 'blur' }
           ],
           amount: [
-            { required: true, message: '请输入库存', trigger: 'blur' }
+            { required: true, message: _this.$t('messages.form.rule.goods.amount.required'), trigger: 'blur' }
           ],
           unit: [
-            { required: true, message: '请输入单位', trigger: 'blur' }
+            { required: true, message: _this.$t('messages.form.rule.goods.unit.required'), trigger: 'blur' }
           ]
         }
       }
@@ -127,13 +129,15 @@
         let _this = this
         _this.$refs.ruleForm.validate((valid) => {
           if (valid) {
-            _this.form.create_time = new Date().getTime()
-            Goods.edit({id: _this.form.id}, _this.form, function (err, rows) {
-              if (err === null) {
-                _this.$router.push({name: 'goods-index'})
-              } else {
-                console.error(err)
-              }
+            this.axios.put(this.api.goods.update + _this.form.id, _this.form)
+            .then(function (response) {
+              _this.$router.push({name: 'goods-index'})
+            })
+            .catch(function (error) {
+              _this.$message({
+                type: 'error',
+                message: error.response.data.message
+              })
             })
           }
         })
@@ -143,25 +147,31 @@
       },
       getCategories () {
         let _this = this
-        Category.all({order: 'id DESC'}, (err, rows) => {
-          if (err !== null) {
-            _this.$message.error(err)
-            return false
-          }
-          _this.categories = rows
+        _this.axios.get(_this.api.goods_categories.all)
+        .then(function (response) {
+          let _data = response.data
+          _this.categories = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
       handleInfo () {
         let _this = this
-        let id = _this.$route.params.id
-        let o = {}
-        o.where = {id: id}
-        Goods.get(o, function (err, row) {
-          if (err === null) {
-            _this.form = row
-          } else {
-            _this.$message.error(err)
-          }
+        let id = _this.$route.query.id
+        _this.axios.get(_this.api.goods.view + id)
+        .then(function (response) {
+          let _data = response.data
+          _this.form = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       }
     }

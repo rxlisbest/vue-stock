@@ -4,9 +4,9 @@
       <el-row>
         <el-col :span="18">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'goods-index' }">商品管理</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'goods-index' }">详情</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">{{$t('messages.tab.index')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'goods-index' }">{{$t('messages.tab.goods')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'goods-index' }">{{$t('messages.crumb.list')}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
         <el-col :span="6" class="el-col-button">
@@ -24,28 +24,28 @@
         </el-table-column>
         <el-table-column
           prop="name"
-          label="名称">
+          :label="$t('messages.column.goods.name')">
         </el-table-column>
         <el-table-column
-          label="单价">
+          :label="$t('messages.column.goods.price')">
           <template slot-scope="scope">
             ￥{{scope.row.price.toFixed(2)}} / {{scope.row.unit}}
           </template>
         </el-table-column>
         <el-table-column
-          label="库存">
+          :label="$t('messages.column.goods.amount')">
           <template slot-scope="scope">
             {{scope.row.amount}} {{scope.row.unit}}
           </template>
         </el-table-column>
         <el-table-column
           width="200"
-          label="操作">
+          :label="$t('messages.column.goods.operation')">
           <template slot-scope="scope">
-            <el-button @click="open({name: 'goods-amount', query: {id: scope.row.id}})" type="primary" icon="el-icon-plus" circle title="入库"></el-button>
-            <el-button @click="open({name: 'goods-detail', query: {id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle title="详情"></el-button>
-            <el-button @click="edit(scope.row.id)" type="primary" icon="el-icon-edit" circle title="编辑"></el-button>
-            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" circle title="删除"></el-button>
+            <el-button @click="open({name: 'goods-amount', query: {id: scope.row.id}})" type="primary" icon="el-icon-plus" circle :title="$t('messages.operation.storage')"></el-button>
+            <el-button @click="open({name: 'goods-detail', query: {id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle :title="$t('messages.operation.view')"></el-button>
+            <el-button @click="edit(scope.row.id)" type="primary" icon="el-icon-edit" circle :title="$t('messages.operation.edit')"></el-button>
+            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" circle :title="$t('messages.operation.delete')"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -74,7 +74,6 @@
     Pagination
   } from 'element-ui'
   import Layout from '../../components/Layout'
-  import Goods from '../../db/goods'
 
   export default {
     name: 'landing-page',
@@ -108,44 +107,51 @@
       },
       del (id) {
         var _this = this
-        this.$confirm('确定删除这条记录?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        _this.$confirm(_this.$t('messages.confirm.delete.message'), _this.$t('messages.confirm.delete.title'), {
+          confirmButtonText: _this.$t('messages.confirm.delete.confirmButtonText'),
+          cancelButtonText: _this.$t('messages.confirm.delete.cancelButtonText'),
           type: 'warning'
         }).then(() => {
-          Goods.del({id: id}, function (err, rows) {
-            if (err === null) {
-              _this.$message({
-                type: 'success',
-                message: '删除成功!'
-              })
-              _this.handleCurrentChange(1)
-            } else {
-              _this.$message.error(err)
-            }
+          _this.axios.delete(_this.api.goods.delete + id)
+          .then(function (response) {
+            _this.$message({
+              type: 'success',
+              message: _this.$t('messages.message.delete.success')
+            })
+            _this.handleCurrentChange ()
+          })
+          .catch(function (error) {
+            _this.$message({
+              type: 'error',
+              message: error.response.data.message
+            })
           })
         }).catch(() => {
-          this.$message({
+          _this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: _this.$t('messages.message.delete.cancel')
           })
         })
       },
       edit (id) {
-        this.$router.push({name: 'goods-edit', params: {id: id}})
+        this.$router.push({name: 'goods-edit', query: {id: id}})
       },
       handleCurrentChange (page) {
         let _this = this
-        let o = {}
-        o.order = 'id DESC'
-        o.pageSize = this.pagination.pageSize
-        o.page = page || this.pagination.page
-        Goods.pagination(o, function (data) {
-          _this.tableData = data.list
-          _this.pagination.pages = data.pages
-          _this.pagination.count = data.count
-          _this.pagination.page = data.page
-          _this.pagination.pageSize = data.pageSize
+        _this.axios.get(_this.api.goods.index, {params: {page: page}})
+        .then(function (response) {
+          let _data = response.data
+          _this.tableData = _data.list
+          _this.pagination.pages = _data.pages
+          _this.pagination.count = _data.total
+          _this.pagination.page = _data.pageNum
+          _this.pagination.pageSize = _data.pageSize
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       }
     }
