@@ -39,7 +39,7 @@
           <template slot-scope="scope">
             <el-button @click="edit(scope.row.id)" type="primary" icon="el-icon-edit" circle :title="$t('messages.operation.edit')"></el-button>
             <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" circle :title="$t('messages.operation.delete')"></el-button>
-            <el-button @click="open({name: 'cart-index', query: {user_id: scope.row.id}})" type="success" icon="el-icon-sold-out" circle :title="$t('messages.operation.out_of_stock')"></el-button>
+            <el-button @click="open({name: 'cart-index', query: {buyer_id: scope.row.id}})" type="success" icon="el-icon-sold-out" circle :title="$t('messages.operation.out_of_stock')"></el-button>
           </template>
         </el-table-column>
       </el-table>

@@ -12,6 +12,7 @@ export default {
   	update: domain + '/goods_categories/update/',
   	delete: domain + '/goods_categories/delete/',
     repeat: domain + '/goods_categories/repeat',
+    all: domain + '/goods_categories/all',
   },
   goods: {
     index: domain + '/goods/index',
@@ -20,6 +21,7 @@ export default {
     update: domain + '/goods/update/',
     delete: domain + '/goods/delete/',
     repeat: domain + '/goods/repeat',
+    all: domain + '/goods/all',
   },
   goods_logs: {
     index: domain + '/goods_logs/index',
@@ -34,5 +36,10 @@ export default {
     update: domain + '/buyers/update/',
     delete: domain + '/buyers/delete/',
     repeat: domain + '/buyers/repeat',
+  },
+  orders: {
+    index: domain + '/orders/index',
+    create: domain + '/orders/create',
+    delete: domain + '/orders/delete/',
   },
 }

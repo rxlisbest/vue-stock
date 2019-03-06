@@ -55,9 +55,6 @@
     Button,
     Table
   } from 'element-ui'
-  import OrderGoods from '../../db/order_goods'
-  import Order from '../../db/order'
-  import User from '../../db/user'
   import Decimal from 'decimal.js'
   import Moment from 'moment'
   // import { ipcRenderer } from 'electron'

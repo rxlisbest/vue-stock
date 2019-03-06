@@ -84,10 +84,6 @@
     Button,
     Table
   } from 'element-ui'
-  import Category from '../../db/category'
-  import Goods from '../../db/goods'
-  import Order from '../../db/order'
-  // import OrderGoods from '../../db/order_goods'
   import Decimal from 'decimal.js'
 
   export default {
@@ -108,7 +104,7 @@
     },
     created () {
       this.getCategories()
-      this.order.user_id = this.$route.query.user_id || 0
+      this.order.buyer_id = this.$route.query.buyer_id || 0
     },
     data () {
       return {
@@ -116,7 +112,7 @@
         goods: [],
         cart: [],
         order: {
-          user_id: 0,
+          buyer_id: 0,
           total: 0.00,
           create_time: 0
         },
@@ -134,21 +130,30 @@
     methods: {
       getCategories () {
         let _this = this
-        Category.all({order: 'id DESC'}, (err, rows) => {
-          if (err !== null) {
-            _this.$message.error(err)
-            return false
-          }
-          _this.categories = rows
+        _this.axios.get(_this.api.goods_categories.all)
+        .then(function (response) {
+          let _data = response.data
+          _this.categories = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
       getGoods (categoryId) {
         let _this = this
-        Goods.all({order: 'id DESC', where: {category_id: categoryId}}, (err, rows) => {
-          if (err !== null) {
-            return false
-          }
-          _this.goods = rows
+        _this.axios.get(_this.api.goods.all, {params: {goods_category_id: categoryId}})
+        .then(function (response) {
+          let _data = response.data
+          _this.goods = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
       addCart (goods) {
@@ -196,7 +201,9 @@
             })
             return false
           }
-          Order.addOrder(_this.order, _this.cart, (orderId) => {
+          _this.axios.post(_this.api.orders.create, {cart: _this.cart, order: _this.order})
+          .then(function (response) {
+            let orderId = response.data
             _this.$message({
               type: 'success',
               message: '结算成功!',
@@ -206,6 +213,22 @@
               }
             })
           })
+          .catch(function (error) {
+            _this.$message({
+              type: 'error',
+              message: error.response.data.message
+            })
+          })
+          // Order.addOrder(_this.order, _this.cart, (orderId) => {
+          //   _this.$message({
+          //     type: 'success',
+          //     message: '结算成功!',
+          //     duration: 1000,
+          //     onClose: () => {
+          //       _this.$router.push({name: 'orders-print', query: {id: orderId}})
+          //     }
+          //   })
+          // })
         }).catch(() => {
           _this.$message({
             type: 'info',
