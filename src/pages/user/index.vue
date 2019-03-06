@@ -71,7 +71,7 @@
   import User from '../../db/user'
 
   export default {
-    name: 'landing-page',
+    name: 'users-index',
     components: {
       Container,
       Header,
@@ -155,7 +155,7 @@
   }
 </script>
 
-<style>
+<style scope>
 .el-row {
     margin-bottom: 20px;
     &:last-child {

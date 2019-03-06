@@ -10,5 +10,6 @@ export default {
   	create: domain + '/goods_categories/create',
   	update: domain + '/goods_categories/update/',
   	delete: domain + '/goods_categories/delete/',
+    repeat: domain + '/goods_categories/repeat',
   }
 }
