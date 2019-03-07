@@ -113,7 +113,7 @@
           cancelButtonText: _this.$t('messages.confirm.orders_delete.cancelButtonText'),
           type: 'warning'
         }).then(() => {
-          _this.axios.delete(_this.api.goods.delete + id)
+          _this.axios.delete(_this.api.orders.delete + id)
           .then(function (response) {
             _this.$message({
               type: 'success',

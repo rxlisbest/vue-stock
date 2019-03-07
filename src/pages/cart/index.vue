@@ -43,7 +43,7 @@
           </el-table-column>
           <el-table-column :label="$t('messages.column.goods.operation')" width="60" type=index>
             <template slot-scope="scope">
-              <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="delCart(scope.$index)" :title="$t('messages.operation.balance')">{{$t('messages.operation.delete')}}></el-button>
+              <el-button size="mini" type="danger" icon="el-icon-delete" circle @click="delCart(scope.$index)" :title="$t('messages.operation.delete')"></el-button>
             </template>
           </el-table-column>
         </el-table>
