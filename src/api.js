@@ -43,8 +43,10 @@ export default {
     view: domain + '/orders/view/',
     create: domain + '/orders/create',
     delete: domain + '/orders/delete/',
+    month: domain + '/orders/month',
   },
   order_goods: {
     all: domain + '/order_goods/all',
+    day: domain + '/order_goods/day',
   },
 }

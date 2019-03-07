@@ -1,43 +1,45 @@
 <template>
-  <el-container class="print-container">
-    <el-main class="print" style="padding-left: 0px; padding-right: 0px;">
-      <el-row class="el-row-bottom-0" v-if="visiable">
-        <el-col :span="2">
-          <el-button type="primary" icon="el-icon-back" @click="goBack()" title="返回"></el-button>
-        </el-col>
-        <el-col :offset="20" :span="2">
-          <el-button type="primary" icon="el-icon-printer" @click="print()" class="button-right" title="打印"></el-button>
+  <layout index="orders">
+    <template slot="body">
+      <el-row>
+        <el-col :offset="8" :span="8">
+          <el-card class="box-card">
+            <div slot="header" class="clearfix">
+              <el-button type="primary" icon="el-icon-back" @click="goBack()" title="返回"></el-button>
+              <el-button type="primary" icon="el-icon-printer" @click="print()" class="button-right" title="打印"></el-button>
+            </div>
+            <div @click="showButton(true)" id="printBox">
+              <el-row class="el-row-bottom-0">
+                <el-col :span="24">
+                  客户：{{buyer.name}}
+                </el-col>
+              </el-row>
+              <el-row class="el-row-bottom-0">
+                <el-col :span="24">
+                  时间：{{Moment(order.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}}
+                </el-col>
+              </el-row>
+              <el-row class="el-row-bottom-0">
+                <el-col :span="10">名称</el-col>
+                <el-col :span="8">单价*数量</el-col>
+                <el-col :span="6" class="el-col-price">小结</el-col>
+              </el-row>
+              <el-row v-for="v in list">
+                <el-col :span="10">{{v.name}}</el-col>
+                <el-col :span="8">{{v.price.toFixed(2)}} * {{v.amount}}</el-col>
+                <el-col :span="6" class="el-col-price">{{getRowTotal(v)}}</el-col>
+              </el-row>
+              <div class="bottom clearfix">
+                <el-row>
+                  <el-col :offset="18" :span="6" class="el-col-price">{{order.total.toFixed(2)}}</el-col>
+                </el-row>
+              </div>
+            </div>
+          </el-card>
         </el-col>
       </el-row>
-      <div @click="showButton(true)">
-        <el-row class="el-row-bottom-0">
-          <el-col :span="24">
-            客户：{{buyer.name}}
-          </el-col>
-        </el-row>
-        <el-row class="el-row-bottom-0">
-          <el-col :span="24">
-            时间：{{Moment(order.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}}
-          </el-col>
-        </el-row>
-        <el-row class="el-row-bottom-0">
-          <el-col :span="10">名称</el-col>
-          <el-col :span="8">单价*数量</el-col>
-          <el-col :span="6" class="el-col-price">小结</el-col>
-        </el-row>
-        <el-row v-for="v in list">
-          <el-col :span="10">{{v.name}}</el-col>
-          <el-col :span="8">{{v.price.toFixed(2)}} * {{v.amount}}</el-col>
-          <el-col :span="6" class="el-col-price">{{getRowTotal(v)}}</el-col>
-        </el-row>
-        <div class="bottom clearfix">
-          <el-row>
-            <el-col :offset="18" :span="6" class="el-col-price">{{order.total.toFixed(2)}}</el-col>
-          </el-row>
-        </div>
-      </div>
-    </el-main>
-  </el-container>
+    </template>
+  </layout>
 </template>
 
 <script>
@@ -57,7 +59,8 @@
   } from 'element-ui'
   import Decimal from 'decimal.js'
   import Moment from 'moment'
-  // import { ipcRenderer } from 'electron'
+  import Layout from '../../components/Layout'
+  import printJS from 'print-js'
 
   export default {
     name: 'cart-index',
@@ -73,7 +76,8 @@
       MenuItem,
       Input,
       Button,
-      Table
+      Table,
+      Layout
     },
     created () {
       this.handleCurrentChange()
@@ -162,12 +166,20 @@
         return new Decimal(goods.amount).mul(new Decimal(goods.price)).toNumber().toFixed(2)
       },
       print () {
-        this.showButton(false)
-        new Promise((resolve, reject) => {
-          resolve(true)
-        }).then(() => {
-          // ipcRenderer.send('print')
-        })
+        var newstr = document.getElementById('printBox').innerHTML;
+        var oldstr = document.body.innerHTML; 
+        document.body.innerHTML = newstr; 
+        window.print(); 
+        window.location.reload()
+        return false; 
+
+        // printJS({
+        //   printable: 'printBox',
+        //   css: "#printBox {width: 1000px}",
+        //   width: 1000,
+        //   // 继承原来的所有样式
+        //   targetStyles: ['*']
+        // })
       },
       goBack () {
         this.$router.go(-1)
@@ -179,7 +191,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .el-col {
     text-align: left;
   }

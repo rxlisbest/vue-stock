@@ -1,4 +1,10 @@
 export const messages = {
+  title: {
+    index: {
+      month: '年度趋势图',
+      day: '今日成交'
+    }
+  },
   crumb: {
     list: "列表",
     edit: "编辑",
@@ -73,6 +79,11 @@ export const messages = {
     },
   },
   column: {
+    index: {
+      goods_name: '商品',
+      total: '金额',
+      amount: '数量',
+    },
     categories: {
       name: "名称",
       operation: "操作",
