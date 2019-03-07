@@ -4,9 +4,9 @@
       <el-row>
         <el-col :span="18">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'orders-index' }">订单管理</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'orders-index' }">列表</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">{{$t('messages.tab.index')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'orders-index' }">{{$t('messages.tab.orders')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'orders-index' }">{{$t('messages.crumb.list')}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
       </el-row>
@@ -20,29 +20,29 @@
           width="80">
         </el-table-column>
         <el-table-column
-          label="金额">
+          :label="$t('messages.column.orders.total')">
           <template slot-scope="scope">
             ￥{{scope.row.total.toFixed(2)}}
           </template>
         </el-table-column>
         <el-table-column
-          label="客户">
+          :label="$t('messages.column.orders.buyer')">
           <template slot-scope="scope">
-            {{scope.row.user_id? user[scope.row.user_id]: '--'}}
+            {{scope.row.buyer_id? buyer[scope.row.buyer_id]: '--'}}
           </template>
         </el-table-column>
         <el-table-column
-          label="下单时间">
+          :label="$t('messages.column.orders.create_time')">
           <template slot-scope="scope">
-            {{Moment(scope.row.create_time).format("YYYY-MM-DD HH:mm:ss")}}
+            {{Moment(scope.row.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}}
           </template>
         </el-table-column>
         <el-table-column
           width="100"
-          label="操作">
+          :label="$t('messages.column.orders.operation')">
           <template slot-scope="scope">
-            <el-button @click="open({name: 'orders-detail', query: {id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle title="详情"></el-button>
-            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" circle title="删除"></el-button>
+            <el-button @click="open({name: 'orders-detail', query: {id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle :title="$t('messages.operation.view')"></el-button>
+            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" circle :title="$t('messages.operation.delete')"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -71,8 +71,6 @@
     Pagination
   } from 'element-ui'
   import Layout from '../../components/Layout'
-  import Order from '../../db/order'
-  import User from '../../db/user'
   import Moment from 'moment'
 
   export default {
@@ -96,12 +94,12 @@
           pageSize: 8,
           pages: 1
         },
-        user: {}
+        buyer: {}
       }
     },
     created () {
       this.handleCurrentChange()
-      this.handleUser()
+      this.handleBuyer()
     },
     methods: {
       Moment: Moment,
@@ -110,53 +108,66 @@
       },
       del (id) {
         let _this = this
-        _this.$confirm('删除订单后，订单商品数量会加回到相应商品的库存！确定删除订单?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
+        _this.$confirm(_this.$t('messages.confirm.orders_delete.message'), _this.$t('messages.confirm.delete.title'), {
+          confirmButtonText: _this.$t('messages.confirm.orders_delete.confirmButtonText'),
+          cancelButtonText: _this.$t('messages.confirm.orders_delete.cancelButtonText'),
           type: 'warning'
         }).then(() => {
-          Order.delOrder(id, () => {
+          _this.axios.delete(_this.api.goods.delete + id)
+          .then(function (response) {
             _this.$message({
               type: 'success',
-              message: '删除成功!'
+              message: _this.$t('messages.message.orders_delete.success')
             })
-            _this.handleCurrentChange(1)
+            _this.handleCurrentChange ()
+          })
+          .catch(function (error) {
+            _this.$message({
+              type: 'error',
+              message: error.response.data.message
+            })
           })
         }).catch(() => {
           _this.$message({
             type: 'info',
-            message: '已取消删除'
+            message: _this.$t('messages.message.orders_delete.cancel')
           })
         })
       },
       handleCurrentChange (page) {
         let _this = this
-        let o = {}
-        o.order = 'id DESC'
-        o.pageSize = this.pagination.pageSize
-        o.page = page || this.pagination.page
-        Order.pagination(o, function (data) {
-          _this.tableData = data.list
-          _this.pagination.pages = data.pages
-          _this.pagination.count = data.count
-          _this.pagination.page = data.page
-          _this.pagination.pageSize = data.pageSize
+        _this.axios.get(_this.api.orders.index, {params: {page: page}})
+        .then(function (response) {
+          let _data = response.data
+          _this.tableData = _data.list
+          _this.pagination.pages = _data.pages
+          _this.pagination.count = _data.total
+          _this.pagination.page = _data.pageNum
+          _this.pagination.pageSize = _data.pageSize
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
-      handleUser () {
+      handleBuyer () {
         let _this = this
-        let o = {}
-        o.order = 'id DESC'
-        User.all(o, function (err, rows) {
-          if (err === null) {
-            let data = {}
-            for (let k in rows) {
-              data[rows[k].id] = rows[k].name
-            }
-            _this.user = data
-          } else {
-            console.error(err)
+        _this.axios.get(_this.api.buyers.all)
+        .then(function (response) {
+          let _data = response.data
+          let d = {}
+          for (let k in _data) {
+            d[_data[k].id] = _data[k].name
           }
+          _this.buyer = d
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       }
     }

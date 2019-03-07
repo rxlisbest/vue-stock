@@ -17,6 +17,7 @@ export const messages = {
     back: "返回",
     balance: "结算",
     total: "合计",
+    print: "打印",
   },
   tab: {
     index: '首页',
@@ -39,7 +40,11 @@ export const messages = {
       success: '结算成功',
       empty: '结算商品数量为0',
       goods_add_already: '已添加'
-    }
+    },
+    orders_delete: {
+      cancel: '已取消删除',
+      success: '删除成功'
+    },
   },
   confirm: {
     delete: {
@@ -59,7 +64,13 @@ export const messages = {
       message: '确定结算?',
       confirmButtonText: '确定',
       cancelButtonText: '取消',
-    }
+    },
+    orders_delete: {
+      title: '提示',
+      message: '删除订单后，订单商品数量会加回到相应商品的库存！确定删除订单?',
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+    },
   },
   column: {
     categories: {
@@ -81,7 +92,17 @@ export const messages = {
     },
     cart: {
       amount: "数量"
-    }
+    },
+    orders: {
+      total: "金额",
+      buyer: "客户",
+      create_time: "下单时间",
+      operation: "操作",
+    },
+    order_goods: {
+      total: "小结",
+      amount: "数量"
+    },
   },
   form: {
     label: {

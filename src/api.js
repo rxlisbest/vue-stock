@@ -35,6 +35,7 @@ export default {
     create: domain + '/buyers/create',
     update: domain + '/buyers/update/',
     delete: domain + '/buyers/delete/',
+    all: domain + '/buyers/all',
     repeat: domain + '/buyers/repeat',
   },
   orders: {

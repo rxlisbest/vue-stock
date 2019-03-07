@@ -4,14 +4,14 @@
       <el-row>
         <el-col :span="18">
           <el-breadcrumb separator-class="el-icon-arrow-right">
-            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'orders-index' }">订单管理</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'orders-detail' }">详情</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/' }">{{$t('messages.tab.index')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'orders-index' }">{{$t('messages.tab.orders')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'orders-detail' }">{{$t('messages.crumb.view')}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
         <el-col :span="6" class="el-col-button">
-          <el-button type="primary" icon="el-icon-back" @click="goBack()" title="返回"></el-button>
-          <el-button type="primary" icon="el-icon-printer" @click="open({name: 'orders-print', query: {id: id}})" title="打印"></el-button>
+          <el-button type="primary" icon="el-icon-back" @click="goBack()" :title="$t('messages.operation.back')"></el-button>
+          <el-button type="primary" icon="el-icon-printer" @click="open({name: 'orders-print', query: {id: id}})" :title="$t('messages.operation.print')"></el-button>
         </el-col>
       </el-row>
 
@@ -24,20 +24,20 @@
           width="80">
         </el-table-column>
         <el-table-column
-          label="单价">
+          :label="$t('messages.column.goods.price')">
           <template slot-scope="scope">
             ￥{{scope.row.price.toFixed(2)}} / {{scope.row.unit}}
           </template>
         </el-table-column>
         <el-table-column
-          label="数量">
+          :label="$t('messages.column.order_goods.amount')">
           <template slot-scope="scope">
             {{scope.row.amount}} {{scope.row.unit}}
           </template>
         </el-table-column>
         <el-table-column
           width="100"
-          label="价格">
+          :label="$t('messages.column.order_goods.total')">
           <template slot-scope="scope">
              ￥{{getRowTotal(scope.row)}}
           </template>
@@ -59,8 +59,6 @@
     Pagination
   } from 'element-ui'
   import Layout from '../../components/Layout'
-  import OrderGoods from '../../db/order_goods'
-  import Moment from 'moment'
   import Decimal from 'decimal.js'
 
   export default {
@@ -87,21 +85,22 @@
       this.id = this.$route.query.id
     },
     methods: {
-      Moment: Moment,
       open (link) {
         this.$router.push(link)
       },
       handleCurrentChange (page) {
         let _this = this
         let id = _this.$route.query.id
-        let o = {where: {order_id: id}}
-        o.order = 'id DESC'
-        OrderGoods.all(o, function (err, rows) {
-          if (err === null) {
-            _this.tableData = rows
-          } else {
-            console.error(err)
-          }
+        _this.axios.get(_this.api.order_goods.all, {params: {order_id: id}})
+        .then(function (response) {
+          let _data = response.data
+          _this.tableData = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
         })
       },
       goBack () {
