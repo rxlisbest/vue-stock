@@ -5,24 +5,24 @@
         <el-col :offset="8" :span="8">
           <el-card class="box-card">
             <div slot="header" class="clearfix">
-              <el-button type="primary" icon="el-icon-back" @click="goBack()" title="返回"></el-button>
-              <el-button type="primary" icon="el-icon-printer" @click="print()" class="button-right" title="打印"></el-button>
+              <el-button type="primary" icon="el-icon-back" @click="goBack()" :title="$t('messages.operation.back')"></el-button>
+              <el-button type="primary" icon="el-icon-printer" @click="print()" class="button-right" :title="$t('messages.operation.print')"></el-button>
             </div>
             <div @click="showButton(true)" id="printBox">
               <el-row class="el-row-bottom-0">
                 <el-col :span="24">
-                  客户：{{buyer.name}}
+                  {{$t('messages.column.print.buyer')}}：{{buyer.name}}
                 </el-col>
               </el-row>
               <el-row class="el-row-bottom-0">
                 <el-col :span="24">
-                  时间：{{Moment(order.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}}
+                  {{$t('messages.column.print.date')}}：{{Moment(order.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}}
                 </el-col>
               </el-row>
               <el-row class="el-row-bottom-0">
-                <el-col :span="10">名称</el-col>
-                <el-col :span="8">单价*数量</el-col>
-                <el-col :span="6" class="el-col-price">小结</el-col>
+                <el-col :span="10">{{$t('messages.column.print.name')}}</el-col>
+                <el-col :span="8">{{$t('messages.column.print.price_amount')}}</el-col>
+                <el-col :span="6" class="el-col-price">{{$t('messages.column.print.total')}}</el-col>
               </el-row>
               <el-row v-for="v in list">
                 <el-col :span="10">{{v.name}}</el-col>

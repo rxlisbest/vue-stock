@@ -70,12 +70,24 @@ export default {
   },
   methods: {
     submitForm () {
-      this.axios.post(this.api.login.index, this.form)
+      let _this = this
+      _this.axios.post(_this.api.login.index, _this.form)
       .then(function (response) {
-        localStorage.setItem("access_token", response.data)
+        let result = localStorage.setItem("access_token", response.data)
+        _this.$message({
+          type: 'success',
+          message: _this.$t('messages.message.login.success'),
+          duration: 1000,
+          onClose: () => {
+            _this.$router.push({name: 'index-index'})
+          }
+        })
       })
       .catch(function (error) {
-        console.log(error.response.data.message)
+        _this.$message({
+          type: 'error',
+          message: error.response.data.message
+        })
       })
     }
   }

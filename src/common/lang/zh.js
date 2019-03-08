@@ -1,4 +1,7 @@
 export const messages = {
+  header: {
+    title: '测试'
+  },
   title: {
     index: {
       month: '年度趋势图',
@@ -12,6 +15,7 @@ export const messages = {
     view: "详情",
     storage: "入库",
     out_of_stock: "出库",
+    change_password: "修改密码",
   },
   operation: {
     add: "新增",
@@ -31,6 +35,8 @@ export const messages = {
     goods: '商品管理',
     buyers: '客户管理',
     orders: '订单管理',
+    logout: "退出登录",
+    users: "用户管理",
   },
   message: {
     delete: {
@@ -51,6 +57,12 @@ export const messages = {
       cancel: '已取消删除',
       success: '删除成功'
     },
+    login: {
+      success: '登录成功'
+    },
+    logout: {
+      success: '退出登录成功'
+    }
   },
   confirm: {
     delete: {
@@ -114,6 +126,13 @@ export const messages = {
       total: "小结",
       amount: "数量"
     },
+    print: {
+      buyer: "客户",
+      date: "时间",
+      name: "名称",
+      price_amount: "单价*数量",
+      total: "小结",
+    },
   },
   form: {
     label: {
@@ -131,6 +150,11 @@ export const messages = {
       },
       buyers: {
         name: '客户名称'
+      },
+      change_password: {
+        oldPassword: '旧密码',
+        password: '新密码',
+        confirmPassword: '确认密码',
       },
     },
     button: {
@@ -166,6 +190,18 @@ export const messages = {
         name: {
           required: '请输入客户名称',
           repeat: '客户名称重复',
+        }
+      },
+      change_password: {
+        oldPassword: {
+          required: '请输入旧密码',
+        },
+        password: {
+          required: '请输入新密码',
+        },
+        confirmPassword: {
+          required: '请输入确认密码',
+          same: '确认密码与新密码不相同'
         }
       },
     }

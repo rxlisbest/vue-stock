@@ -27,6 +27,7 @@ export default {
         if (response.status == HttpStatus.UNAUTHORIZED) {
           localStorage.removeItem('access_token')
           _this.$router.push({name: 'login'})
+          return false;
         }
         return response
       }, function (error) {

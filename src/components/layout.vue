@@ -3,18 +3,17 @@
     <el-header>
       <el-row :gutter="20">
     		<el-col :span="8" class="logo">
-          测试后台管理系统
+          {{$t('messages.header.title')}}
         </el-col>
         <el-col :offset="8" :span="8" style="text-align: right;">
-          <el-dropdown>
-            <i class="el-icon-setting" style="margin-right: 15px"></i>
+          <el-dropdown :split-button="true">
+            <i class="el-icon-setting" style="margin-right: 15px"></i>{{user.name}}
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>查看</el-dropdown-item>
-              <el-dropdown-item>新增</el-dropdown-item>
-              <el-dropdown-item>删除</el-dropdown-item>
+              <el-dropdown-item><span @click="open({name: 'users-change_password'})">{{$t('messages.crumb.change_password')}}</span></el-dropdown-item>
+              <el-dropdown-item><span @click="logout()">{{$t('messages.tab.logout')}}</span></el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
-          <span>王小虎</span>
+          <!-- <span>{{user.name}}</span> -->
         </el-col>
       </el-row>
     </el-header>
@@ -54,6 +53,13 @@
       Menu,
       MenuItem
     },
+    data () {
+      return {
+        user: {
+          name: '',
+        }
+      }
+    },
     props: [
       'index'
     ],
@@ -61,15 +67,30 @@
       let access_token = localStorage.getItem('access_token')
       if (access_token == undefined || access_token.length == 0) {
         this.$router.push({name: 'login'})
-      }
-    },
-    data () {
-      return {
+      } else {
+        access_token = access_token.split('.')
+        let user = JSON.parse(atob(access_token[1]))
+        this.user = user
       }
     },
     methods: {
+      open (link) {
+        this.$router.push(link)
+      },
       handleSelect (key, keyPath) {
         this.$router.push({name: key + '-index'})
+      },
+      logout () {
+        let _this = this
+        localStorage.removeItem('access_token')
+        _this.$message({
+          type: 'success',
+          message: _this.$t('messages.message.logout.success'),
+          duration: 1000,
+          onClose: () => {
+            _this.$router.push({name: 'login'})
+          }
+        })
       }
     }
   }

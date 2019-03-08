@@ -91,6 +91,11 @@ export default new Router({
       component: require('@/pages/buyer/edit').default
     },
     {
+      path: '/users/change_password',
+      name: 'users-change_password',
+      component: require('@/pages/user/change_password').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

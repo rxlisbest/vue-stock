@@ -49,4 +49,7 @@ export default {
     all: domain + '/order_goods/all',
     day: domain + '/order_goods/day',
   },
+  users: {
+    change_password: domain + '/users/change_password/',
+  },
 }
