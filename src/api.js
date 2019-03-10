@@ -1,5 +1,5 @@
-let mode = 'develop'
-let domain = mode == 'develop' ? 'http://localhost:8080' : ''
+let mode = ''
+let domain = mode == 'develop' ? 'http://localhost:8080' : 'http://39.96.71.175:8081'
 export default {
   login: {
     index: domain + '/login/index'

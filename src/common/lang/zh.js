@@ -1,6 +1,6 @@
 export const messages = {
   header: {
-    title: '测试'
+    title: '后台商品管理系统'
   },
   title: {
     index: {
@@ -156,10 +156,15 @@ export const messages = {
         password: '新密码',
         confirmPassword: '确认密码',
       },
+      login: {
+        username: '用户名',
+        password: '密码'
+      }
     },
     button: {
       submit: '提交',
-      cancel: '取消'
+      cancel: '取消',
+      reset: '重置'
     },
     rule: {
       categories: {

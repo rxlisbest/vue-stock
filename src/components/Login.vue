@@ -20,24 +20,24 @@
     <span></span>
     <span></span>
     <span></span>
-    <el-main>
+    <el-main style="z-index: 999;">
       <el-row>
         <el-col :xs="24" :sm="24" :md="{span: 12, offset: 6}" :lg="{span: 8, offset: 8}" :xl="{span: 8, offset: 8}">
           <el-card shadow="always" class="box-card">
             <div slot="header" class="clearfix">
-              登录
+              {{$t('messages.header.title')}}
             </div>
             <div>
               <el-form class="admin-login-form" ref="form" :model="form" label-width="60px" size="medium">
-                <el-form-item label="用户名">
+                <el-form-item :label="$t('messages.form.label.login.username')">
                   <el-input v-model="form.username"></el-input>
                 </el-form-item>
-                <el-form-item label="密码">
+                <el-form-item :label="$t('messages.form.label.login.password')">
                   <el-input type="password" v-model="form.password"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="submitForm()">提交</el-button>
-                  <el-button @click="resetForm('numberValidateForm')">重置</el-button>
+                  <el-button type="primary" @click="submitForm()">{{$t('messages.form.button.submit')}}</el-button>
+                  <el-button @click="resetForm('numberValidateForm')">{{$t('messages.form.button.reset')}}</el-button>
                 </el-form-item>
               </el-form>
             </div>
@@ -59,6 +59,13 @@ export default {
       this.$router.push({name: 'index-index'})
       localStorage.removeItem('userinfo')
     }
+
+    document.onkeydown = e=>{
+      let _key = window.event.keyCode;
+      if (_key === 13) {
+        this.submitForm()
+      }
+    }
   },
   data() {
   	return {
@@ -73,7 +80,9 @@ export default {
       let _this = this
       _this.axios.post(_this.api.login.index, _this.form)
       .then(function (response) {
-        let result = localStorage.setItem("access_token", response.data)
+        let access_token = response.data
+        let result = localStorage.setItem("access_token", access_token)
+        _this.$store.commit('setAccessToken', access_token)
         _this.$message({
           type: 'success',
           message: _this.$t('messages.message.login.success'),

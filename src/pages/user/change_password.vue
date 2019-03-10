@@ -14,17 +14,17 @@
       <el-form ref="ruleForm" :model="form" :rules="rules" label-width="80px" class="demo-ruleForm">
         <el-form-item prop="oldPassword" :label="$t('messages.form.label.change_password.oldPassword')">
           <el-col :span="8">
-            <el-input v-model="form.oldPassword"></el-input>
+            <el-input type="password" v-model="form.oldPassword"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item prop="password" :label="$t('messages.form.label.change_password.password')">
           <el-col :span="8">
-            <el-input v-model="form.password"></el-input>
+            <el-input type="password" v-model="form.password"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item prop="confirmPassword" :label="$t('messages.form.label.change_password.confirmPassword')">
           <el-col :span="8">
-            <el-input v-model="form.confirmPassword"></el-input>
+            <el-input type="password" v-model="form.confirmPassword"></el-input>
           </el-col>
         </el-form-item>
         <el-form-item>
