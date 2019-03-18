@@ -5,7 +5,7 @@ export const messages = {
   title: {
     index: {
       month: '年度趋势图',
-      day: '今日成交'
+      day: '成交统计'
     }
   },
   crumb: {
@@ -133,6 +133,17 @@ export const messages = {
       price_amount: "单价*数量",
       total: "小结",
     },
+  },
+  search: {
+    date: '选择日期',
+    today: "今天",
+    yesterday: "昨天",
+    two_days_ago: "2天前",
+    three_days_ago: "3天前",
+    four_days_ago: "4天前",
+    five_days_ago: "5天前",
+    six_days_ago: "6天前",
+    a_week_ago: "1周前",
   },
   form: {
     label: {

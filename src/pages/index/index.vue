@@ -5,6 +5,14 @@
         <el-col id="myChart" style="min-height: 500px;" :span="17"></el-col>
         <el-col :span="7">
           <h3>{{$t('messages.title.index.day')}}</h3>
+          <el-date-picker
+            v-model="date"
+            align="right"
+            type="date"
+            :placeholder="$t('messages.search.date')"
+            @change="selectDate"
+            :picker-options="pickerOptions">
+          </el-date-picker>
           <el-table
             :data="tableData"
             stripe
@@ -55,6 +63,7 @@
   } from 'element-ui'
   import Layout from '../../components/Layout'
   import echarts from 'echarts'
+  import dateformat from 'dateformat'
 
   export default {
     name: 'index-index',
@@ -70,12 +79,74 @@
       Layout
     },
     data () {
+      let _this = this
       return {
         tableData: [],
         pagination: {
           page: 1,
           pageSize: 8,
           pages: 1
+        },
+        date: '',
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+          shortcuts: [{
+            text: _this.$t('messages.search.today'),
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: _this.$t('messages.search.yesterday'),
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: _this.$t('messages.search.two_days_ago'),
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 2);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: _this.$t('messages.search.three_days_ago'),
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 3);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: _this.$t('messages.search.four_days_ago'),
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 4);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: _this.$t('messages.search.five_days_ago'),
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 5);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: _this.$t('messages.search.six_days_ago'),
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 6);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: _this.$t('messages.search.a_week_ago'),
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
         }
       }
     },
@@ -144,6 +215,10 @@
             message: error.response.data.message
           })
         })
+      },
+      selectDate (date) {
+        dateformat(this.date, 'isoDate')
+        console.log(this.date)
       }
     }
   }

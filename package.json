@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "dateformat": "^3.0.3",
     "decimal.js": "^10.0.2",
     "echarts": "^4.1.0",
     "element-ui": "^2.5.4",
