@@ -103,6 +103,7 @@ export const messages = {
     goods: {
       name: "名称",
       price: "单价",
+      discount_price: "折扣价",
       amount: "库存",
       operation: "操作",
     },
@@ -133,6 +134,9 @@ export const messages = {
       price_amount: "单价*数量",
       total: "小结",
     },
+    cart: {
+      is_discount: "折扣"
+    }
   },
   search: {
     date: '选择日期',
@@ -155,6 +159,7 @@ export const messages = {
         goods_category_id: '分类',
         goods_category_id_placeholder: '分类',
         price: '单价',
+        discount_price: "折扣价",
         amount: '库存',
         unit: '单位',
         unit_description: '（例：千克、个... ...）'
@@ -194,6 +199,9 @@ export const messages = {
         },
         price: {
           required: '请输入单价'
+        },
+        discount_price: {
+          required: '请输入折扣价'
         },
         amount: {
           required: '请输入库存'

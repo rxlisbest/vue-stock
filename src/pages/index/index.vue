@@ -153,6 +153,7 @@
     mounted () {
       this.month()
       this.day()
+      this.date = new Date()
     },
     methods: {
       month(){
@@ -200,7 +201,8 @@
       },
       day (page) {
         let _this = this
-        _this.axios.get(_this.api.order_goods.day, {params: {page: page}})
+        let date = dateformat(_this.date, 'isoDate')
+        _this.axios.get(_this.api.order_goods.day, {params: {page: page, date: date}})
         .then(function (response) {
           let _data = response.data
           _this.tableData = _data.list
@@ -216,9 +218,8 @@
           })
         })
       },
-      selectDate (date) {
-        dateformat(this.date, 'isoDate')
-        console.log(this.date)
+      selectDate () {
+        this.day()
       }
     }
   }

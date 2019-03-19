@@ -30,6 +30,9 @@
         <el-form-item prop="price" :label="$t('messages.form.label.goods.price')">
           <el-input-number v-model="form.price" :precision="2" :step="1" :min="0"></el-input-number>
         </el-form-item>
+        <el-form-item prop="discount_price" :label="$t('messages.form.label.goods.discount_price')">
+          <el-input-number v-model="form.discount_price" :precision="2" :step="1" :min="0"></el-input-number>
+        </el-form-item>
         <el-form-item prop="amount" :label="$t('messages.form.label.goods.amount')">
           <el-input-number v-model="form.amount" :precision="2" :step="1" :min="0"></el-input-number>
         </el-form-item>
@@ -101,7 +104,11 @@
       return {
         form: {
           name: '',
-          category_id: ''
+          goods_category_id: '',
+          amount: 0.00,
+          price: 0.00,
+          discount_price: 0.00,
+          unit: ''
         },
         categories: [],
         rules: {
@@ -114,6 +121,9 @@
           ],
           price: [
             { required: true, message: _this.$t('messages.form.rule.goods.price.required'), trigger: 'blur' }
+          ],
+          discount_price: [
+            { required: true, message: _this.$t('messages.form.rule.goods.discount_price.required'), trigger: 'blur' }
           ],
           amount: [
             { required: true, message: _this.$t('messages.form.rule.goods.amount.required'), trigger: 'blur' }

@@ -35,6 +35,12 @@
           </template>
         </el-table-column>
         <el-table-column
+          :label="$t('messages.column.goods.discount_price')">
+          <template slot-scope="scope">
+            ￥{{scope.row.discount_price.toFixed(2)}} / {{goods.unit}}
+          </template>
+        </el-table-column>
+        <el-table-column
           :label="$t('messages.column.goods_logs.amount')">
           <template slot-scope="scope">
             {{scope.row.amount}} {{scope.row.unit}}

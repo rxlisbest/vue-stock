@@ -25,13 +25,19 @@
             :label="$t('messages.column.goods.name')" prop="name">
           </el-table-column>
           <el-table-column
+            :label="$t('messages.column.cart.is_discount')" width="50">
+            <template slot-scope="scope">
+              <el-checkbox :true-label="1" :false-label="0" v-model="scope.row.is_discount" @change="handleDiscount(scope.$index, scope.row)"></el-checkbox>
+            </template>
+          </el-table-column>
+          <el-table-column
             :label="$t('messages.column.goods.price')" width="140">
             <template slot-scope="scope">
               <el-input-number controls-position="right" v-model="scope.row.price" size="mini" :min="0"></el-input-number>
             </template>
           </el-table-column>
           <el-table-column
-            :label="$t('messages.column.goods.amount')" width="60">
+            :label="$t('messages.column.goods.amount')" width="100">
             <template slot-scope="scope">
               {{scope.row.amount}} {{scope.row.unit}}
             </template>
@@ -121,7 +127,7 @@
     },
     watch: {
       cart: {
-        handler: function () {
+        handler: function (newVal) {
           this.getTotal()
         },
         deep: true
@@ -165,6 +171,8 @@
             return false
           }
         }
+        // goods.is_discount = 0
+        // goods.normal_price = goods.price
         goods.order_amount = 0.00
         this.cart.push(goods)
         this.getTotal()
@@ -229,6 +237,13 @@
       },
       goBack () {
         this.$router.go(-1)
+      },
+      handleDiscount (index, data) {
+        if (data.is_discount) {
+          this.cart[index].price = data.discount_price
+        } else {
+          this.cart[index].price = data.normal_price
+        }
       }
     }
   }
