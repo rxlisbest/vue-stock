@@ -225,24 +225,6 @@
           }
           _this.$store.commit('setOrder', order)
           _this.$router.push({name: 'cart-payment'})
-          // _this.axios.post(_this.api.orders.create, {cart: _this.cart, order: _this.order})
-          // .then(function (response) {
-          //   let orderId = response.data
-          //   _this.$message({
-          //     type: 'success',
-          //     message: _this.$t('messages.message.cart.success'),
-          //     duration: 1000,
-          //     onClose: () => {
-          //       _this.$router.push({name: 'orders-print', query: {id: orderId}})
-          //     }
-          //   })
-          // })
-          // .catch(function (error) {
-          //   _this.$message({
-          //     type: 'error',
-          //     message: error.response.data.message
-          //   })
-          // })
         }).catch(() => {
           _this.$message({
             type: 'info',

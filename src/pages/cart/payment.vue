@@ -84,9 +84,10 @@
       this.getPayments()
       if (this.$store.state.order.cart == undefined || this.$store.state.order.order == undefined) {
         this.$router.push({name: 'buyers-index'})
+      } else {
+        this.cart = this.$store.state.order.cart
+        this.order = this.$store.state.order.order
       }
-      this.cart = this.$store.state.order.cart
-      this.order = this.$store.state.order.order
     },
     data () {
       return {
@@ -162,7 +163,7 @@
             })
             return false
           }
-          _this.axios.post(_this.api.orders.create, {cart: _this.cart, order: _this.order})
+          _this.axios.post(_this.api.orders.create, {cart: _this.cart, order: _this.order, payments: _this.payments})
           .then(function (response) {
             let orderId = response.data
             _this.$message({
