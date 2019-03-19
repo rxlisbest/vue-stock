@@ -70,7 +70,6 @@
           </el-col>
         </el-row>
       </div>
-      </div>
     </el-col>
   </el-container>
 </template>
@@ -111,6 +110,16 @@
     created () {
       this.getCategories()
       this.order.buyer_id = this.$route.query.buyer_id || 0
+    },
+    mounted () {
+      if (this.$store.state.order.cart != undefined && this.$store.state.order.order != undefined) {
+        if (this.order.buyer_id == this.$store.state.order.order.buyer_id) {
+          this.cart = this.$store.state.order.cart
+          this.order = this.$store.state.order.order
+        } else {
+          this.$store.commit('setOrder', {})
+        }
+      }
     },
     data () {
       return {
@@ -171,8 +180,8 @@
             return false
           }
         }
-        // goods.is_discount = 0
-        // goods.normal_price = goods.price
+        goods.is_discount = 0
+        goods.normal_price = goods.price
         goods.order_amount = 0.00
         this.cart.push(goods)
         this.getTotal()
@@ -210,24 +219,30 @@
             })
             return false
           }
-          _this.axios.post(_this.api.orders.create, {cart: _this.cart, order: _this.order})
-          .then(function (response) {
-            let orderId = response.data
-            _this.$message({
-              type: 'success',
-              message: _this.$t('messages.message.cart.success'),
-              duration: 1000,
-              onClose: () => {
-                _this.$router.push({name: 'orders-print', query: {id: orderId}})
-              }
-            })
-          })
-          .catch(function (error) {
-            _this.$message({
-              type: 'error',
-              message: error.response.data.message
-            })
-          })
+          let order = {
+            cart: _this.cart,
+            order: _this.order
+          }
+          _this.$store.commit('setOrder', order)
+          _this.$router.push({name: 'cart-payment'})
+          // _this.axios.post(_this.api.orders.create, {cart: _this.cart, order: _this.order})
+          // .then(function (response) {
+          //   let orderId = response.data
+          //   _this.$message({
+          //     type: 'success',
+          //     message: _this.$t('messages.message.cart.success'),
+          //     duration: 1000,
+          //     onClose: () => {
+          //       _this.$router.push({name: 'orders-print', query: {id: orderId}})
+          //     }
+          //   })
+          // })
+          // .catch(function (error) {
+          //   _this.$message({
+          //     type: 'error',
+          //     message: error.response.data.message
+          //   })
+          // })
         }).catch(() => {
           _this.$message({
             type: 'info',

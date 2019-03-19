@@ -61,6 +61,11 @@ export default new Router({
       component: require('@/pages/cart/index').default
     },
     {
+      path: '/cart/payment',
+      name: 'cart-payment',
+      component: require('@/pages/cart/payment').default
+    },
+    {
       path: '/orders',
       name: 'orders-index',
       component: require('@/pages/order/index').default

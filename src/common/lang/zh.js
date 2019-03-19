@@ -28,6 +28,7 @@ export const messages = {
     balance: "结算",
     total: "合计",
     print: "打印",
+    order: "生成订单",
   },
   tab: {
     index: '首页',
@@ -52,6 +53,11 @@ export const messages = {
       success: '结算成功',
       empty: '结算商品数量为0',
       goods_add_already: '已添加'
+    },
+    payment: {
+      total_error: '订单金额与支付金额不相等，请核对',
+      cancel: '已取消生成订单',
+      success: '生成订单成功',
     },
     orders_delete: {
       cancel: '已取消删除',
@@ -80,6 +86,12 @@ export const messages = {
     cart: {
       title: '提示',
       message: '确定结算?',
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+    },
+    payment: {
+      title: '提示',
+      message: '确定生成订单?',
       confirmButtonText: '确定',
       cancelButtonText: '取消',
     },
@@ -115,7 +127,10 @@ export const messages = {
       operation: "操作",
     },
     cart: {
-      amount: "数量"
+      amount: "数量",
+      is_discount: "折扣",
+      name: "支付方式",
+      money: "金额"
     },
     orders: {
       total: "金额",
@@ -134,8 +149,9 @@ export const messages = {
       price_amount: "单价*数量",
       total: "小结",
     },
-    cart: {
-      is_discount: "折扣"
+    payment: {
+      order_total: "订单金额",
+      paid_total: "支付金额",
     }
   },
   search: {
