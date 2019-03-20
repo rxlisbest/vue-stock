@@ -60,8 +60,10 @@
             </el-table-column>
             <el-table-column
               v-for="item in payments"
-              :prop="item.id.toString()"
               :label="item.name">
+              <template slot-scope="scope">
+                ￥{{scope.row[item.id.toString()].toFixed(2)}}
+              </template>
             </el-table-column>
           </el-table>
         </el-col>
