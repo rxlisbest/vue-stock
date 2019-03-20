@@ -119,3 +119,9 @@
     align-items: center;
   }
 </style>
+<style scoped>
+  .el-header {
+    border-bottom: 1px solid #eee;
+    padding-top: 8px;
+  }
+</style>

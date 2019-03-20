@@ -53,6 +53,7 @@
           <el-table
             :data="userDayData"
             stripe
+            border
             style="width: 100%">
             <el-table-column
               prop="name"
@@ -385,6 +386,9 @@
 </script>
 
 <style>
+.el-container {
+  padding: 0;
+}
 .el-row {
     margin-bottom: 20px;
     &:last-child {
