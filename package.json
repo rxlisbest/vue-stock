@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "base64-utf8": "^0.1.8",
     "dateformat": "^3.0.3",
     "decimal.js": "^10.0.2",
     "echarts": "^4.1.0",

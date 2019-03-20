@@ -6,7 +6,8 @@ export const messages = {
     index: {
       month: '年度趋势图',
       day: '日统计',
-      order_payment_day: '支付方式'
+      order_payment_day: '支付方式',
+      user_day: '用户支付统计'
     }
   },
   crumb: {
@@ -104,6 +105,9 @@ export const messages = {
     },
   },
   column: {
+    user: {
+      name: '用户名称',
+    },
     index: {
       goods_name: '商品',
       total: '金额',

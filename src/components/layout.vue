@@ -43,6 +43,7 @@
     Menu,
     MenuItem
   } from 'element-ui'
+  import base64 from 'base64-utf8'
   export default {
     name: 'layout',
     components: {
@@ -69,7 +70,7 @@
         this.$router.push({name: 'login'})
       } else {
         access_token = access_token.split('.')
-        let user = JSON.parse(atob(access_token[1]))
+        let user = JSON.parse(base64.decode(access_token[1]))
         this.user = user
       }
     },

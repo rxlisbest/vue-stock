@@ -15,7 +15,6 @@
         </h3>
         <el-col id="myPie" style="min-height: 500px;" :span="17"></el-col>
         <el-col :span="7">
-          
           <el-table
             :data="tableData"
             stripe
@@ -38,7 +37,6 @@
               :label="$t('messages.column.index.amount')">
             </el-table-column>
           </el-table>
-
           <el-pagination
             background
             layout="prev, pager, next"
@@ -47,6 +45,25 @@
             @current-change="day"
             :total="pagination.count" class="pagination">
           </el-pagination>
+        </el-col>
+      </el-row>
+      <el-row>
+        <!-- <span>{{$t('messages.title.index.user_day')}}</span> -->
+        <el-col :span="24">
+          <el-table
+            :data="userDayData"
+            stripe
+            style="width: 100%">
+            <el-table-column
+              prop="name"
+              :label="$t('messages.column.user.name')">
+            </el-table-column>
+            <el-table-column
+              v-for="item in payments"
+              :prop="item.id.toString()"
+              :label="item.name">
+            </el-table-column>
+          </el-table>
         </el-col>
       </el-row>
       <el-row>
@@ -88,6 +105,8 @@
       let _this = this
       return {
         tableData: [],
+        userDayData: [],
+        payments: [],
         pagination: {
           page: 1,
           pageSize: 8,
@@ -161,6 +180,7 @@
       this.day()
       this.orderPaymentDay()
       this.date = new Date()
+      this.getPayments()
     },
     methods: {
       month(){
@@ -244,8 +264,22 @@
           })
         })
       },
+      userOrderPaymentDay () {
+        let _this = this
+        let date = dateformat(_this.date, 'isoDate')
+        _this.axios.get(_this.api.order_payments.user_day, {params: {date: date}})
+        .then(function (response) {
+          let _data = response.data
+          _this.userDayData = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
+        })
+      },
       initPie (data) {
-        console.log(data)
         // assemble data 
         let legendData = new Array()
         for (let i = 0; i < data.length; i++) {
@@ -320,9 +354,29 @@
         }
         myChart.setOption(option)
       },
+      getPayments () {
+        let _this = this
+        _this.axios.get(_this.api.payments.all)
+        .then(function (response) {
+          let _data = response.data
+          _this.payments = []
+          for (let v of _data) {
+            v.money = 0.00
+            _this.payments.push(v)
+          }
+          _this.userOrderPaymentDay()
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
+        })
+      },
       selectDate () {
         this.day()
         this.orderPaymentDay()
+        this.userOrderPaymentDay()
       }
     }
   }
