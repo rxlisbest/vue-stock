@@ -2,9 +2,8 @@
   <layout index="index">
     <template slot="body">
       <el-row>
-        <el-col id="myChart" style="min-height: 500px;" :span="17"></el-col>
-        <el-col :span="7">
-          <h3>{{$t('messages.title.index.day')}}</h3>
+        <h3>
+          {{$t('messages.title.index.day')}}
           <el-date-picker
             v-model="date"
             align="right"
@@ -13,6 +12,10 @@
             @change="selectDate"
             :picker-options="pickerOptions">
           </el-date-picker>
+        </h3>
+        <el-col id="myPie" style="min-height: 500px;" :span="17"></el-col>
+        <el-col :span="7">
+          
           <el-table
             :data="tableData"
             stripe
@@ -45,6 +48,9 @@
             :total="pagination.count" class="pagination">
           </el-pagination>
         </el-col>
+      </el-row>
+      <el-row>
+        <el-col id="myChart" style="min-height: 300px;" :span="24"></el-col>
       </el-row>
     </template>
   </layout>
@@ -153,6 +159,7 @@
     mounted () {
       this.month()
       this.day()
+      this.orderPaymentDay()
       this.date = new Date()
     },
     methods: {
@@ -218,8 +225,104 @@
           })
         })
       },
+      orderPaymentDay () {
+        let _this = this
+        let date = dateformat(_this.date, 'isoDate')
+        _this.axios.get(_this.api.order_payments.day, {params: {date: date}})
+        .then(function (response) {
+          let _data = response.data
+          let data = new Array();
+          for (let i = 0; i < _data.length; i++) {
+            data.push({value: _data[i].money, name: _data[i].name})
+          }
+          _this.initPie(data)
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
+        })
+      },
+      initPie (data) {
+        console.log(data)
+        // assemble data 
+        let legendData = new Array()
+        for (let i = 0; i < data.length; i++) {
+          legendData.push(data[i].name)
+        }
+        let _this = this
+        // 基于准备好的dom，初始化echarts实例
+        let myChart = echarts.init(document.getElementById('myPie'))
+        // 绘制图表
+        let option = {
+          tooltip: {
+            trigger: 'item',
+            formatter: "{a} <br/>{b}: ￥{c} ({d}%)"
+          },
+          legend: {
+            orient: 'vertical',
+            x: 'left',
+            data: legendData
+          },
+          series: [
+            {
+              name: _this.$t('messages.title.index.order_payment_day'),
+              type:'pie',
+              radius: ['40%', '55%'],
+              label: {
+                normal: {
+                  formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}￥{c}  {per|{d}%}  ',
+                  backgroundColor: '#eee',
+                  borderColor: '#aaa',
+                  borderWidth: 1,
+                  borderRadius: 4,
+                  // shadowBlur:3,
+                  // shadowOffsetX: 2,
+                  // shadowOffsetY: 2,
+                  // shadowColor: '#999',
+                  // padding: [0, 7],
+                  rich: {
+                    a: {
+                      color: '#999',
+                      lineHeight: 22,
+                      align: 'center'
+                    },
+                    // abg: {
+                    //     backgroundColor: '#333',
+                    //     width: '100%',
+                    //     align: 'right',
+                    //     height: 22,
+                    //     borderRadius: [4, 4, 0, 0]
+                    // },
+                    hr: {
+                      borderColor: '#aaa',
+                      width: '100%',
+                      borderWidth: 0.5,
+                      height: 0
+                    },
+                    b: {
+                      fontSize: 16,
+                      lineHeight: 33
+                    },
+                    per: {
+                      color: '#eee',
+                      backgroundColor: '#334455',
+                      padding: [2, 4],
+                      borderRadius: 2
+                    }
+                  }
+                }
+              },
+              data: data
+            }
+          ]
+        }
+        myChart.setOption(option)
+      },
       selectDate () {
         this.day()
+        this.orderPaymentDay()
       }
     }
   }
