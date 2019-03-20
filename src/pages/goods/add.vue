@@ -201,3 +201,9 @@
     background-color: #f9fafc;
   }
 </style>
+
+<style scoped>
+  .el-input-number {
+    width: 200px;
+  }
+</style>

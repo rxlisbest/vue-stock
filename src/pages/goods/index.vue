@@ -199,3 +199,9 @@
     text-align: right;
   }
 </style>
+
+<style scoped>
+  .el-input-number {
+    width: 200px;
+  }
+</style>
