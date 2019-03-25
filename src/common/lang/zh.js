@@ -129,6 +129,7 @@ export const messages = {
     },
     buyers: {
       name: "名称",
+      phone: "电话",
       operation: "操作",
     },
     cart: {
@@ -169,6 +170,9 @@ export const messages = {
     five_days_ago: "5天前",
     six_days_ago: "6天前",
     a_week_ago: "1周前",
+    buyers: {
+      keyword: '名称/电话'
+    }
   },
   form: {
     label: {
@@ -186,7 +190,8 @@ export const messages = {
         unit_description: '（例：千克、个... ...）'
       },
       buyers: {
-        name: '客户名称'
+        name: '客户名称',
+        phone: '客户电话'
       },
       change_password: {
         oldPassword: '旧密码',

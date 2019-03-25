@@ -17,6 +17,11 @@
             <el-input v-model="form.name"></el-input>
           </el-col>
         </el-form-item>
+        <el-form-item prop="phone" :label="$t('messages.form.label.buyers.phone')">
+          <el-col :span="8">
+            <el-input v-model="form.phone"></el-input>
+          </el-col>
+        </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSubmit">{{$t('messages.form.button.submit')}}</el-button>
           <el-button @click="onCancle">{{$t('messages.form.button.cancel')}}</el-button>

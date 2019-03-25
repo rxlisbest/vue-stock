@@ -14,8 +14,8 @@
         </el-col>
       </el-row>
       <el-form :inline="true" :model="searchForm" class="demo-form-inline">
-        <el-form-item label="名称">
-          <el-input v-model="searchForm.name" placeholder="名称"></el-input>
+        <el-form-item :label="$t('messages.search.buyers.keyword')">
+          <el-input v-model="searchForm.name" :placeholder="$t('messages.search.buyers.keyword')"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="onSearch" icon="el-icon-search"></el-button>
@@ -32,6 +32,10 @@
         <el-table-column
           prop="name"
           :label="$t('messages.column.buyers.name')">
+        </el-table-column>
+        <el-table-column
+          prop="phone"
+          :label="$t('messages.column.buyers.phone')">
         </el-table-column>
         <el-table-column
           width="160"
