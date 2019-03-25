@@ -8,6 +8,10 @@ export const messages = {
       day: '日统计',
       order_payment_day: '支付方式',
       user_day: '用户支付统计'
+    },
+    order_payments: {
+      payment: '订单支付',
+      goods: '订单商品'
     }
   },
   crumb: {
@@ -159,6 +163,10 @@ export const messages = {
     payment: {
       order_total: "订单金额",
       paid_total: "支付金额",
+    },
+    order_payments: {
+      name: '支付方式',
+      money: '金额'
     }
   },
   search: {

@@ -14,7 +14,28 @@
           <el-button type="primary" icon="el-icon-printer" @click="open({name: 'orders-print', query: {id: id}})" :title="$t('messages.operation.print')"></el-button>
         </el-col>
       </el-row>
+      <h3>{{$t('messages.title.order_payments.payment')}}</h3>
+      <el-table
+        :data="orderPaymentList"
+        stripe
+        style="width: 100%">
+        <el-table-column
+          type="index"
+          width="80">
+        </el-table-column>
+        <el-table-column
+          prop="name"
+          :label="$t('messages.column.order_payments.name')">
+        </el-table-column>
+        <el-table-column
+          :label="$t('messages.column.order_payments.money')">
+          <template slot-scope="scope">
+            ￥{{scope.row.money.toFixed(2)}}
+          </template>
+        </el-table-column>
+      </el-table>
 
+      <h3>{{$t('messages.title.order_payments.goods')}}</h3>
       <el-table
         :data="tableData"
         stripe
@@ -77,16 +98,33 @@
     data () {
       return {
         tableData: [],
-        id: 0
+        id: 0,
+        orderPaymentList: []
       }
     },
     created () {
       this.handleCurrentChange()
+      this.handleOrderPayment()
       this.id = this.$route.query.id
     },
     methods: {
       open (link) {
         this.$router.push(link)
+      },
+      handleOrderPayment () {
+        let _this = this
+        let id = _this.$route.query.id
+        _this.axios.get(_this.api.order_payments.all, {params: {order_id: id}})
+        .then(function (response) {
+          let _data = response.data
+          _this.orderPaymentList = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
+        })
       },
       handleCurrentChange (page) {
         let _this = this
