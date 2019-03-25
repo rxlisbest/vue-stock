@@ -14,6 +14,15 @@
         </el-col>
       </el-row>
 
+      <el-form :inline="true" :model="searchForm" class="demo-form-inline">
+        <el-form-item :label="$t('messages.search.goods.keyword')">
+          <el-input v-model="searchForm.name" :placeholder="$t('messages.search.goods.keyword')"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="onSearch" icon="el-icon-search"></el-button>
+        </el-form-item>
+      </el-form>
+
       <el-table
         :data="tableData"
         stripe
@@ -101,6 +110,9 @@
           page: 1,
           pageSize: 8,
           pages: 1
+        },
+        searchForm: {
+          name: ''
         }
       }
     },
@@ -144,7 +156,7 @@
       },
       handleCurrentChange (page) {
         let _this = this
-        _this.axios.get(_this.api.goods.index, {params: {page: page}})
+        _this.axios.get(_this.api.goods.index, {params: {page: page, name: _this.searchForm.name}})
         .then(function (response) {
           let _data = response.data
           _this.tableData = _data.list
@@ -159,6 +171,9 @@
             message: error.response.data.message
           })
         })
+      },
+      onSearch () {
+        this.handleCurrentChange()
       }
     }
   }

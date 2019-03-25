@@ -50,13 +50,6 @@
 
 <script>
   import {
-    Container,
-    Header,
-    Main,
-    Col,
-    Row,
-    Table,
-    TableColumn,
     Pagination
   } from 'element-ui'
   import Layout from '../../components/Layout'
@@ -64,14 +57,6 @@
   export default {
     name: 'categories-page',
     components: {
-      Container,
-      Header,
-      Main,
-      Col,
-      Row,
-      Table,
-      TableColumn,
-      Pagination,
       Layout
     },
     data () {

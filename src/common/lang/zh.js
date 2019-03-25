@@ -172,7 +172,10 @@ export const messages = {
     a_week_ago: "1周前",
     buyers: {
       keyword: '名称/电话'
-    }
+    },
+    goods: {
+      keyword: '名称'
+    },
   },
   form: {
     label: {
