@@ -41,6 +41,12 @@
           </template>
         </el-table-column>
         <el-table-column
+          :label="$t('messages.column.goods_logs.create_time')">
+          <template slot-scope="scope">
+           {{Moment(scope.row.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}}
+          </template>
+        </el-table-column>
+        <el-table-column
           :label="$t('messages.column.goods_logs.amount')">
           <template slot-scope="scope">
             {{scope.row.amount}} {{scope.row.unit}}
@@ -79,6 +85,7 @@
     Pagination
   } from 'element-ui'
   import Layout from '../../components/Layout'
+  import Moment from 'moment'
 
   export default {
     name: 'goods-detail',
@@ -109,6 +116,7 @@
       this.handleCurrentChange()
     },
     methods: {
+      Moment: Moment,
       open (link) {
         this.$router.push(link)
       },

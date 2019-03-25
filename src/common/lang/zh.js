@@ -125,7 +125,8 @@ export const messages = {
       operation: "操作",
     },
     goods_logs: {
-      amount: "入库数量"
+      amount: "入库数量",
+      create_time: '入库时间'
     },
     buyers: {
       name: "名称",
