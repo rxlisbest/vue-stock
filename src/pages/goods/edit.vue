@@ -33,9 +33,6 @@
         <el-form-item prop="discount_price" :label="$t('messages.form.label.goods.discount_price')">
           <el-input-number v-model="form.discount_price" :precision="2" :step="1" :min="0"></el-input-number>
         </el-form-item>
-        <el-form-item prop="amount" :label="$t('messages.form.label.goods.amount')">
-          <el-input-number v-model="form.amount" :precision="2" :step="1" :min="0"></el-input-number>
-        </el-form-item>
         <el-form-item prop="unit" :label="$t('messages.form.label.goods.unit')">
           <el-col :span="3">
             <el-input v-model="form.unit"></el-input>

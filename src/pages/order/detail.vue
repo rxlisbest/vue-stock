@@ -45,6 +45,10 @@
           width="80">
         </el-table-column>
         <el-table-column
+          prop="name"
+          :label="$t('messages.column.goods.name')">
+        </el-table-column>
+        <el-table-column
           :label="$t('messages.column.goods.price')">
           <template slot-scope="scope">
             ￥{{scope.row.price.toFixed(2)}} / {{scope.row.unit}}

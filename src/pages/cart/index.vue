@@ -33,7 +33,8 @@
           <el-table-column
             :label="$t('messages.column.goods.price')" width="140">
             <template slot-scope="scope">
-              <el-input-number controls-position="right" v-model="scope.row.price" size="mini" :min="0"></el-input-number>
+              ￥{{scope.row.price.toFixed(2)}}
+              <!-- <el-input-number controls-position="right" v-model="scope.row.price" size="mini" :min="0" disabled></el-input-number> -->
             </template>
           </el-table-column>
           <el-table-column
