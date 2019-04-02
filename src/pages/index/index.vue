@@ -70,7 +70,7 @@
               width="50"
               :label="$t('messages.column.goods.operation')">
               <template slot-scope="scope">
-                <el-button @click="spreadOrderPaymentDay(scope.row.payment_id)" type="primary" icon="el-icon-arrow-right" circle :title="$t('messages.operation.storage')"></el-button>
+                <el-button @click="setPaymentId(scope.row.payment_id)" type="primary" icon="el-icon-arrow-right" circle :title="$t('messages.operation.storage')"></el-button>
               </template>
             </el-table-column>
           </el-table>
@@ -344,13 +344,10 @@
           })
         })
       },
-      spreadOrderPaymentDay (payment_id) {
+      spreadOrderPaymentDay (page) {
         let _this = this
-        if (payment_id) {
-          _this.payment_id = payment_id
-        }
         let date = dateformat(_this.date, 'isoDate')
-        _this.axios.get(_this.api.order_payments.index, {params: {date: date, payment_id: _this.payment_id}})
+        _this.axios.get(_this.api.order_payments.index, {params: {page: page, date: date, payment_id: _this.payment_id}})
         .then(function (response) {
           let _data = response.data
           _this.orderPaymentBuyerDayData = _data.list
@@ -479,6 +476,10 @@
         this.day()
         this.orderPaymentDay()
         this.userOrderPaymentDay()
+      },
+      setPaymentId (payment_id) {
+        this.payment_id = payment_id
+        this.spreadOrderPaymentDay()
       }
     }
   }
