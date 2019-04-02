@@ -17,12 +17,6 @@
             <el-input v-model="form.name" :disabled="true"></el-input>
           </el-col>
         </el-form-item>
-        <el-form-item prop="price" :label="$t('messages.form.label.goods.price')">
-          <el-input-number v-model="form.price" :precision="2" :step="1" :min="0"></el-input-number>
-        </el-form-item>
-        <el-form-item prop="discount_price" :label="$t('messages.form.label.goods.discount_price')">
-          <el-input-number v-model="form.discount_price" :precision="2" :step="1" :min="0"></el-input-number>
-        </el-form-item>
         <el-form-item prop="amount" :label="$t('messages.form.label.goods.amount')">
           <el-input-number v-model="form.amount" :precision="2" :step="1" :min="0"></el-input-number>
         </el-form-item>
@@ -73,8 +67,6 @@
           id: 0,
           name: '',
           amount: 0.00,
-          price: 0.00,
-          discount_price: 0.00,
         },
         categories: [],
         rules: {

@@ -48,6 +48,28 @@
         </el-col>
       </el-row>
       <el-row>
+        <el-col :span="12">
+          <el-table
+            :data="orderPaymentDayData"
+            stripe
+            style="width: 100%">
+            <el-table-column
+              type="index">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              :label="$t('messages.column.user.name')">
+            </el-table-column>
+            <el-table-column
+              :label="$t('messages.column.user.name')">
+              <template slot-scope="scope">
+                ￥{{scope.row.money.toFixed(2)}}
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+      </el-row>
+      <el-row>
         <!-- <span>{{$t('messages.title.index.user_day')}}</span> -->
         <el-col :span="24">
           <el-table
@@ -109,6 +131,7 @@
       return {
         tableData: [],
         userDayData: [],
+        orderPaymentDayData: [],
         payments: [],
         pagination: {
           page: 1,
@@ -254,6 +277,7 @@
         _this.axios.get(_this.api.order_payments.day, {params: {date: date}})
         .then(function (response) {
           let _data = response.data
+          _this.orderPaymentDayData = _data
           let data = new Array();
           for (let i = 0; i < _data.length; i++) {
             data.push({value: _data[i].money, name: _data[i].name})
