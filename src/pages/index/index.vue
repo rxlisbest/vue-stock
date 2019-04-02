@@ -247,6 +247,11 @@
         }
       }
     },
+    watch: {
+      payment_id (value) {
+        this.pagination1.page = 0
+      }
+    },
     mounted () {
       this.month()
       this.day()
