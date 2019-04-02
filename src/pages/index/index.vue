@@ -47,7 +47,7 @@
           </el-pagination>
         </el-col>
       </el-row>
-      <el-row>
+      <el-row :gutter="20">
         <el-col :span="12">
           <el-table
             :data="orderPaymentDayData"
@@ -58,15 +58,54 @@
             </el-table-column>
             <el-table-column
               prop="name"
-              :label="$t('messages.column.user.name')">
+              :label="$t('messages.column.order_payments.name')">
             </el-table-column>
             <el-table-column
-              :label="$t('messages.column.user.name')">
+              :label="$t('messages.column.order_payments.money')">
+              <template slot-scope="scope">
+                ￥{{scope.row.money.toFixed(2)}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              width="50"
+              :label="$t('messages.column.goods.operation')">
+              <template slot-scope="scope">
+                <el-button @click="spreadOrderPaymentDay(scope.row.payment_id)" type="primary" icon="el-icon-arrow-right" circle :title="$t('messages.operation.storage')"></el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </el-col>
+        <el-col :span="12" v-if="payment_id">
+          <el-table
+            :data="orderPaymentBuyerDayData"
+            stripe
+            style="width: 100%">
+            <el-table-column
+              type="index">
+            </el-table-column>
+            <el-table-column
+              prop="buyer_name"
+              :label="$t('messages.column.buyers.name')">
+            </el-table-column>
+            <el-table-column
+              prop="name"
+              :label="$t('messages.column.order_payments.name')">
+            </el-table-column>
+            <el-table-column
+              :label="$t('messages.column.order_payments.money')">
               <template slot-scope="scope">
                 ￥{{scope.row.money.toFixed(2)}}
               </template>
             </el-table-column>
           </el-table>
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :current-page="pagination1.page"
+            :page-size="pagination1.pageSize"
+            @current-change="spreadOrderPaymentDay"
+            :total="pagination1.count" class="pagination">
+          </el-pagination>
         </el-col>
       </el-row>
       <el-row>
@@ -132,8 +171,15 @@
         tableData: [],
         userDayData: [],
         orderPaymentDayData: [],
+        orderPaymentBuyerDayData: [],
         payments: [],
+        payment_id: 0,
         pagination: {
+          page: 1,
+          pageSize: 8,
+          pages: 1
+        },
+        pagination1: {
           page: 1,
           pageSize: 8,
           pages: 1
@@ -283,6 +329,30 @@
             data.push({value: _data[i].money, name: _data[i].name})
           }
           _this.initPie(data)
+          _this.payment_id = 0
+          _this.spreadOrderPaymentDay()
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
+        })
+      },
+      spreadOrderPaymentDay (payment_id) {
+        let _this = this
+        if (payment_id) {
+          _this.payment_id = payment_id
+        }
+        let date = dateformat(_this.date, 'isoDate')
+        _this.axios.get(_this.api.order_payments.index, {params: {date: date, payment_id: _this.payment_id}})
+        .then(function (response) {
+          let _data = response.data
+          _this.orderPaymentBuyerDayData = _data.list
+          _this.pagination1.pages = _data.pages
+          _this.pagination1.count = _data.total
+          _this.pagination1.page = _data.pageNum
+          _this.pagination1.pageSize = _data.pageSize
         })
         .catch(function (error) {
           _this.$message({
