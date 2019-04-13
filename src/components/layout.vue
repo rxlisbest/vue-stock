@@ -21,8 +21,8 @@
       <el-aside width="200px">
         <el-menu :default-active="index" class="el-menu-vertical-demo"  @select="handleSelect" :collapse="false">
           <el-menu-item index="index">{{$t('messages.tab.index')}}</el-menu-item>
-          <el-menu-item v-if="user.role_id & 1 == 1" index="categories">{{$t('messages.tab.categories')}}</el-menu-item>
-          <el-menu-item v-if="user.role_id & 1 == 1" index="goods">{{$t('messages.tab.goods')}}</el-menu-item>
+          <el-menu-item index="categories">{{$t('messages.tab.categories')}}</el-menu-item>
+          <el-menu-item index="goods">{{$t('messages.tab.goods')}}</el-menu-item>
           <el-menu-item index="buyers">{{$t('messages.tab.buyers')}}</el-menu-item>
           <el-menu-item index="orders">{{$t('messages.tab.orders')}}</el-menu-item>
         </el-menu>
