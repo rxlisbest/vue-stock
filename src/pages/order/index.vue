@@ -11,6 +11,19 @@
         </el-col>
       </el-row>
 
+      <el-form :inline="true" class="demo-form-inline">
+        <el-form-item :label="$t('messages.column.orders.create_time')">
+          <el-date-picker
+            v-model="date"
+            align="right"
+            type="date"
+            :placeholder="$t('messages.search.date')"
+            @change="selectDate"
+            :picker-options="pickerOptions">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+
       <el-table
         :data="tableData"
         stripe
@@ -72,6 +85,7 @@
   } from 'element-ui'
   import Layout from '../../components/Layout'
   import Moment from 'moment'
+  import dateformat from 'dateformat'
 
   export default {
     name: 'landing-page',
@@ -94,12 +108,16 @@
           pageSize: 8,
           pages: 1
         },
-        buyer: {}
+        buyer: {},
+        date: ''
       }
     },
     created () {
       this.handleCurrentChange()
       this.handleBuyer()
+    },
+    mounted () {
+      this.date = new Date()
     },
     methods: {
       Moment: Moment,
@@ -136,7 +154,8 @@
       },
       handleCurrentChange (page) {
         let _this = this
-        _this.axios.get(_this.api.orders.index, {params: {page: page}})
+        let date = dateformat(_this.date, 'isoDate')
+        _this.axios.get(_this.api.orders.index, {params: {page: page, date: date}})
         .then(function (response) {
           let _data = response.data
           _this.tableData = _data.list
@@ -169,7 +188,10 @@
             message: error.response.data.message
           })
         })
-      }
+      },
+      selectDate () {
+        this.handleCurrentChange()
+      },
     }
   }
 </script>
