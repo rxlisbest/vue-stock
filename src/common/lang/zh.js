@@ -44,6 +44,7 @@ export const messages = {
     orders: '订单管理',
     logout: "退出登录",
     users: "用户管理",
+    debts: "欠款管理",
   },
   message: {
     delete: {
@@ -167,6 +168,13 @@ export const messages = {
     order_payments: {
       name: '支付方式',
       money: '金额'
+    },
+    debts: {
+      name: '客户',
+      money: '欠款总额',
+      count: '欠款次数',
+      max_create_time: '最近欠款时间',
+      operation: "操作",
     }
   },
   search: {

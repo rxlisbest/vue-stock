@@ -25,6 +25,7 @@
           <el-menu-item index="goods">{{$t('messages.tab.goods')}}</el-menu-item>
           <el-menu-item index="buyers">{{$t('messages.tab.buyers')}}</el-menu-item>
           <el-menu-item index="orders">{{$t('messages.tab.orders')}}</el-menu-item>
+          <el-menu-item index="debts">{{$t('messages.tab.debts')}}</el-menu-item>
         </el-menu>
       </el-aside>
       <el-main>

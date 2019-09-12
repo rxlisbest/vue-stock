@@ -101,6 +101,16 @@ export default new Router({
       component: require('@/pages/user/change_password').default
     },
     {
+      path: '/debts',
+      name: 'debts-index',
+      component: require('@/pages/debt/index').default
+    },
+    {
+      path: '/debts/detail',
+      name: 'debts-detail',
+      component: require('@/pages/debt/detail').default
+    },
+    {
       path: '*',
       redirect: '/'
     }
