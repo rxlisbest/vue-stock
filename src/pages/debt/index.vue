@@ -52,7 +52,7 @@
           width="100"
           :label="$t('messages.column.debts.operation')">
           <template slot-scope="scope">
-            <el-button @click="open({name: 'debts-detail', query: {id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle :title="$t('messages.operation.view')"></el-button>
+            <el-button @click="open({name: 'debts-detail', query: {buyer_id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle :title="$t('messages.operation.view')"></el-button>
             <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" circle :title="$t('messages.operation.delete')"></el-button>
           </template>
         </el-table-column>
@@ -123,34 +123,6 @@
       Moment: Moment,
       open (link) {
         this.$router.push(link)
-      },
-      del (id) {
-        let _this = this
-        _this.$confirm(_this.$t('messages.confirm.debts_delete.message'), _this.$t('messages.confirm.delete.title'), {
-          confirmButtonText: _this.$t('messages.confirm.debts_delete.confirmButtonText'),
-          cancelButtonText: _this.$t('messages.confirm.debts_delete.cancelButtonText'),
-          type: 'warning'
-        }).then(() => {
-          _this.axios.delete(_this.api.debts.delete + id)
-          .then(function (response) {
-            _this.$message({
-              type: 'success',
-              message: _this.$t('messages.message.debts_delete.success')
-            })
-            _this.handleCurrentChange ()
-          })
-          .catch(function (error) {
-            _this.$message({
-              type: 'error',
-              message: error.response.data.message
-            })
-          })
-        }).catch(() => {
-          _this.$message({
-            type: 'info',
-            message: _this.$t('messages.message.debts_delete.cancel')
-          })
-        })
       },
       handleCurrentChange (page) {
         let _this = this

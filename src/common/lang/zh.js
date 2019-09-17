@@ -175,6 +175,14 @@ export const messages = {
       count: '欠款次数',
       max_create_time: '最近欠款时间',
       operation: "操作",
+    },
+    debt_detail: {
+      buyer_name: '客户',
+      payment_name: '支付方式',
+      money: '金额',
+      create_time: '欠款时间',
+      operation: "操作",
+      operation: "操作",
     }
   },
   search: {

@@ -1,41 +1,16 @@
 <template>
-  <layout index="orders">
+  <layout index="debts">
     <template slot="body">
       <el-row>
         <el-col :span="18">
           <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/' }">{{$t('messages.tab.index')}}</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'orders-index' }">{{$t('messages.tab.orders')}}</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ name: 'orders-detail' }">{{$t('messages.crumb.view')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'debts-index' }">{{$t('messages.tab.debts')}}</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ name: 'debts-index' }">{{$t('messages.crumb.list')}}</el-breadcrumb-item>
           </el-breadcrumb>
         </el-col>
-        <el-col :span="6" class="el-col-button">
-          <el-button type="primary" icon="el-icon-back" @click="goBack()" :title="$t('messages.operation.back')"></el-button>
-          <el-button type="primary" icon="el-icon-printer" @click="open({name: 'orders-print', query: {id: id}})" :title="$t('messages.operation.print')"></el-button>
-        </el-col>
       </el-row>
-      <h3>{{$t('messages.title.order_payments.payment')}}</h3>
-      <el-table
-        :data="orderPaymentList"
-        stripe
-        style="width: 100%">
-        <el-table-column
-          type="index"
-          width="80">
-        </el-table-column>
-        <el-table-column
-          prop="name"
-          :label="$t('messages.column.order_payments.name')">
-        </el-table-column>
-        <el-table-column
-          :label="$t('messages.column.order_payments.money')">
-          <template slot-scope="scope">
-            ￥{{scope.row.money.toFixed(2)}}
-          </template>
-        </el-table-column>
-      </el-table>
 
-      <h3>{{$t('messages.title.order_payments.goods')}}</h3>
       <el-table
         :data="tableData"
         stripe
@@ -45,29 +20,42 @@
           width="80">
         </el-table-column>
         <el-table-column
-          prop="name"
-          :label="$t('messages.column.goods.name')">
+          prop="buyer_name"
+          :label="$t('messages.column.debt_detail.buyer_name')">
         </el-table-column>
         <el-table-column
-          :label="$t('messages.column.goods.price')">
+          prop="payment_name"
+          :label="$t('messages.column.debt_detail.payment_name')">
+        </el-table-column>
+        <el-table-column
+          :label="$t('messages.column.debt_detail.money')">
           <template slot-scope="scope">
-            ￥{{scope.row.price.toFixed(2)}} / {{scope.row.unit}}
+            ￥{{scope.row.money.toFixed(2)}}
           </template>
         </el-table-column>
         <el-table-column
-          :label="$t('messages.column.order_goods.amount')">
+          :label="$t('messages.column.debt_detail.create_time')">
           <template slot-scope="scope">
-            {{scope.row.amount}} {{scope.row.unit}}
+            {{Moment(scope.row.create_time * 1000).format("YYYY-MM-DD HH:mm:ss")}}
           </template>
         </el-table-column>
         <el-table-column
           width="100"
-          :label="$t('messages.column.order_goods.total')">
+          :label="$t('messages.column.debt_detail.operation')">
           <template slot-scope="scope">
-             ￥{{getRowTotal(scope.row)}}
+            <el-button @click="open({name: 'debts-detail', query: {id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle :title="$t('messages.operation.view')"></el-button>
           </template>
         </el-table-column>
       </el-table>
+
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :current-page="pagination.page"
+        :page-size="pagination.pageSize"
+        @current-change="handleCurrentChange"
+        :total="pagination.count" class="pagination">
+      </el-pagination>
     </template>
   </layout>
 </template>
@@ -84,7 +72,8 @@
     Pagination
   } from 'element-ui'
   import Layout from '../../components/Layout'
-  import Decimal from 'decimal.js'
+  import Moment from 'moment'
+  import dateformat from 'dateformat'
 
   export default {
     name: 'landing-page',
@@ -102,41 +91,40 @@
     data () {
       return {
         tableData: [],
-        id: 0,
-        orderPaymentList: []
+        pagination: {
+          page: 1,
+          pageSize: 8,
+          pages: 1
+        },
+        buyer: {},
+        searchForm: {
+          buyer_id: 0
+        }
       }
     },
     created () {
+      this.searchForm.buyer_id = this.$route.query.buyer_id
       this.handleCurrentChange()
-      this.handleOrderPayment()
-      this.id = this.$route.query.id
+      this.handleBuyer()
+    },
+    mounted () {
+      this.date = new Date()
     },
     methods: {
+      Moment: Moment,
       open (link) {
         this.$router.push(link)
       },
-      handleOrderPayment () {
-        let _this = this
-        let id = _this.$route.query.id
-        _this.axios.get(_this.api.order_payments.all, {params: {order_id: id}})
-        .then(function (response) {
-          let _data = response.data
-          _this.orderPaymentList = _data
-        })
-        .catch(function (error) {
-          _this.$message({
-            type: 'error',
-            message: error.response.data.message
-          })
-        })
-      },
       handleCurrentChange (page) {
         let _this = this
-        let id = _this.$route.query.id
-        _this.axios.get(_this.api.order_goods.all, {params: {order_id: id}})
+        _this.axios.get(_this.api.order_payments.buyer_debt_detail, {params: {page: page, buyer_id: _this.searchForm.buyer_id}})
         .then(function (response) {
           let _data = response.data
-          _this.tableData = _data
+          _this.tableData = _data.list
+          _this.pagination.pages = _data.pages
+          _this.pagination.count = _data.total
+          _this.pagination.page = _data.pageNum
+          _this.pagination.pageSize = _data.pageSize
         })
         .catch(function (error) {
           _this.$message({
@@ -145,11 +133,26 @@
           })
         })
       },
-      goBack () {
-        this.$router.go(-1)
+      handleBuyer () {
+        let _this = this
+        _this.axios.get(_this.api.buyers.all)
+        .then(function (response) {
+          let _data = response.data
+          let d = {}
+          for (let k in _data) {
+            d[_data[k].id] = _data[k].name
+          }
+          _this.buyer = d
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
+        })
       },
-      getRowTotal (goods) {
-        return new Decimal(goods.amount).mul(new Decimal(goods.price)).toNumber().toFixed(2)
+      onSearch () {
+        this.handleCurrentChange()
       }
     }
   }
