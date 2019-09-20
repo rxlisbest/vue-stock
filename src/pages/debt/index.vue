@@ -53,7 +53,6 @@
           :label="$t('messages.column.debts.operation')">
           <template slot-scope="scope">
             <el-button @click="open({name: 'debts-detail', query: {buyer_id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle :title="$t('messages.operation.view')"></el-button>
-            <el-button @click="del(scope.row.id)" type="danger" icon="el-icon-delete" circle :title="$t('messages.operation.delete')"></el-button>
           </template>
         </el-table-column>
       </el-table>
