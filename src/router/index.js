@@ -111,6 +111,11 @@ export default new Router({
       component: require('@/pages/debt/detail').default
     },
     {
+      path: '/debts/pay',
+      name: 'debts-pay',
+      component: require('@/pages/debt/pay').default
+    },
+    {
       path: '*',
       redirect: '/'
     }

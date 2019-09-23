@@ -43,7 +43,7 @@
           width="100"
           :label="$t('messages.column.debt_detail.operation')">
           <template slot-scope="scope">
-            <el-button @click="open({name: 'debts-detail', query: {id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle :title="$t('messages.operation.view')"></el-button>
+            <el-button @click="open({name: 'debts-pay', query: {id: scope.row.id}})" type="primary" icon="el-icon-tickets" circle :title="$t('messages.operation.view')"></el-button>
           </template>
         </el-table-column>
       </el-table>
