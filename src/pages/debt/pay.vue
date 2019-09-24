@@ -52,7 +52,6 @@
           </el-col>
         </el-row>
       </div>
-      
     </template>
   </layout>
 </template>
@@ -93,7 +92,7 @@
     created () {
       this.getPayments()
       if (this.$store.state.order.cart == undefined || this.$store.state.order.order == undefined) {
-        this.$router.push({name: 'buyers-index'})
+        // this.$router.push({name: 'buyers-index'})
       } else {
         this.cart = this.$store.state.order.cart
         this.order = this.$store.state.order.order
