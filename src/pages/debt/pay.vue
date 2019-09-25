@@ -71,6 +71,7 @@
     Button,
     Table
   } from 'element-ui'
+  import Layout from '../../components/Layout'
   import Decimal from 'decimal.js'
 
   export default {
@@ -87,12 +88,13 @@
       MenuItem,
       Input,
       Button,
-      Table
+      Table,
+      Layout
     },
     created () {
       this.getPayments()
       if (this.$store.state.order.cart == undefined || this.$store.state.order.order == undefined) {
-        // this.$router.push({name: 'buyers-index'})
+        // this.$router.push({name: 'buyers-index'})a
       } else {
         this.cart = this.$store.state.order.cart
         this.order = this.$store.state.order.order
