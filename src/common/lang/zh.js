@@ -35,6 +35,7 @@ export const messages = {
     total: "合计",
     print: "打印",
     order: "生成订单",
+    pay_debt: "还款",
   },
   tab: {
     index: '首页',
@@ -75,6 +76,11 @@ export const messages = {
     },
     logout: {
       success: '退出登录成功'
+    },
+    pay_debt: {
+      total_error: '订单金额与支付金额不相等，请核对',
+      cancel: '已取消还款',
+      success: '还款成功',
     }
   },
   confirm: {
@@ -105,6 +111,12 @@ export const messages = {
     orders_delete: {
       title: '提示',
       message: '删除订单后，订单商品数量会加回到相应商品的库存！确定删除订单?',
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+    },
+    order_payments: {
+      title: '提示',
+      message: '确定还款?',
       confirmButtonText: '确定',
       cancelButtonText: '取消',
     },
@@ -167,7 +179,10 @@ export const messages = {
     },
     order_payments: {
       name: '支付方式',
-      money: '金额'
+      money: '金额',
+      debt_money: '现欠款金额',
+      debt_init_money: '初始欠款金额',
+      debt_pay_money: '本次还款金额'
     },
     debts: {
       name: '客户',

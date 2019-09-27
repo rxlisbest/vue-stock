@@ -26,29 +26,28 @@
       </div>
       <div class="cart-total">
         <el-row type="flex" class="row-bg" justify="space-between" style="height: 100%;">
-          <el-col :span="4" class="cart-total-col">
-            {{$t('messages.column.payment.order_total')}}
+          <el-col :span="2" class="cart-total-col">
+            {{$t('messages.column.order_payments.debt_money')}}
           </el-col>
-          <el-col :span="12" class="cart-total-col">
-            ￥{{ order.total.toFixed(2) }}
+          <el-col :span="8" class="cart-total-col">
+            ￥{{ payment.money.toFixed(2) }}
           </el-col>
-          <el-col :span="4" class="cart-total-col">
+          <el-col :span="2" class="cart-total-col">
+            {{$t('messages.column.order_payments.debt_init_money')}}
           </el-col>
-          <el-col :span="4" class="cart-total-col">
+          <el-col :span="8" class="cart-total-col">
+            ￥{{ payment.init_money.toFixed(2) }}
           </el-col>
         </el-row>
         <el-row type="flex" class="row-bg" justify="space-between" style="height: 100%;">
-          <el-col :span="4" class="cart-total-col">
-            {{$t('messages.column.payment.paid_total')}}
+          <el-col :span="2" class="cart-total-col">
+            {{$t('messages.column.order_payments.debt_pay_money')}}
           </el-col>
-          <el-col :span="12" class="cart-total-col">
+          <el-col :span="8" class="cart-total-col">
             ￥{{ paid_total.toFixed(2) }}
           </el-col>
           <el-col :span="4" class="cart-total-col">
-            <el-button type="primary" icon="el-icon-back" @click="goBack()" :title="$t('messages.operation.back')"></el-button>
-          </el-col>
-          <el-col :span="4" class="cart-total-col">
-            <el-button type="danger" @click="addOrder" :title="$t('messages.operation.order')">{{$t('messages.operation.order')}}</el-button>
+            <el-button type="danger" @click="payDebt" :title="$t('messages.operation.pay_debt')">{{$t('messages.operation.pay_debt')}}</el-button>
           </el-col>
         </el-row>
       </div>
@@ -93,12 +92,7 @@
     },
     created () {
       this.getPayments()
-      if (this.$store.state.order.cart == undefined || this.$store.state.order.order == undefined) {
-        // this.$router.push({name: 'buyers-index'})a
-      } else {
-        this.cart = this.$store.state.order.cart
-        this.order = this.$store.state.order.order
-      }
+      this.handleInfo()
     },
     data () {
       return {
@@ -108,6 +102,12 @@
         order: {
           buyer_id: 0,
           total: 0.00,
+          create_time: 0
+        },
+        payment: {
+          id: 0,
+          money: 0.00,
+          init_money: 0.00,
           create_time: 0
         }
       }
@@ -121,6 +121,21 @@
       }
     },
     methods: {
+      handleInfo () {
+        let _this = this
+        let id = _this.$route.query.id
+        _this.axios.get(_this.api.order_payments.view + id)
+        .then(function (response) {
+          let _data = response.data
+          _this.payment = _data
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
+        })
+      },
       getPayments () {
         let _this = this
         _this.axios.get(_this.api.payments.all)
@@ -153,36 +168,21 @@
       goBack () {
         this.$router.go(-1)
       },
-      handleDiscount (index, data) {
-        if (data.is_discount) {
-          this.cart[index].price = data.discount_price
-        } else {
-          this.cart[index].price = data.normal_price
-        }
-      },
-      addOrder () {
+      payDebt() {
         let _this = this
-        _this.$confirm(_this.$t('messages.confirm.payment.message'), _this.$t('messages.confirm.payment.title'), {
-          confirmButtonText: _this.$t('messages.confirm.payment.confirmButtonText'),
-          cancelButtonText: _this.$t('messages.confirm.payment.cancelButtonText'),
+        _this.$confirm(_this.$t('messages.confirm.order_payments.message'), _this.$t('messages.confirm.order_payments.title'), {
+          confirmButtonText: _this.$t('messages.confirm.order_payments.confirmButtonText'),
+          cancelButtonText: _this.$t('messages.confirm.order_payments.cancelButtonText'),
           type: 'warning'
         }).then(() => {
-          if (_this.paid_total.toFixed(2) != _this.order.total.toFixed(2)) {
-            _this.$message({
-              type: 'error',
-              message: _this.$t('messages.message.payment.total_error')
-            })
-            return false
-          }
-          _this.axios.post(_this.api.orders.create, {cart: _this.cart, order: _this.order, payments: _this.payments})
+          _this.axios.post(_this.api.order_payments.repay, {orderPaymentId: _this.payment.id, payments: _this.payments})
           .then(function (response) {
-            let orderId = response.data
             _this.$message({
               type: 'success',
-              message: _this.$t('messages.message.payment.success'),
+              message: _this.$t('messages.message.pay_debt.success'),
               duration: 1000,
               onClose: () => {
-                _this.$router.push({name: 'orders-print', query: {id: orderId}})
+                _this.$router.go(-1)
               }
             })
           })
@@ -195,7 +195,7 @@
         }).catch(() => {
           _this.$message({
             type: 'info',
-            message: _this.$t('messages.message.payment.cancel')
+            message: _this.$t('messages.message.pay_debt.cancel')
           })
         })
       }
