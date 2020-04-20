@@ -59,7 +59,7 @@
   } from 'element-ui'
   import Decimal from 'decimal.js'
   import Moment from 'moment'
-  import Layout from '../../components/Layout'
+  import Layout from '@/components/Layout'
   import printJS from 'print-js'
 
   export default {

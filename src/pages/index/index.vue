@@ -148,7 +148,7 @@
     TableColumn,
     Pagination
   } from 'element-ui'
-  import Layout from '../../components/Layout'
+  import Layout from '@/components/Layout'
   import echarts from 'echarts'
   import dateformat from 'dateformat'
 

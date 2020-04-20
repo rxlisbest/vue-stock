@@ -70,7 +70,7 @@
     Button,
     Table
   } from 'element-ui'
-  import Layout from '../../components/Layout'
+  import Layout from '@/components/Layout'
   import Decimal from 'decimal.js'
 
   export default {

@@ -1,5 +1,4 @@
-let mode = ''
-let domain = mode == 'develop' ? 'http://localhost:8080' : 'http://39.96.71.175:8081'
+let domain = process.env.API_DOMAIN
 export default {
   login: {
     index: domain + '/login/index'

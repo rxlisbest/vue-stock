@@ -71,7 +71,7 @@
     TableColumn,
     Pagination
   } from 'element-ui'
-  import Layout from '../../components/Layout'
+  import Layout from '@/components/Layout'
 
   export default {
     name: 'buyers-index',
