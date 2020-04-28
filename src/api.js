@@ -1,17 +1,16 @@
-let domain = process.env.API_DOMAIN
+let domain = process.env.VUE_APP_API_DOMAIN
 export default {
   login: {
     index: domain + '/login/index'
   },
   goods_categories: {
     all: domain + '/goods_categories/all',
-  	index: domain + '/goods_categories/index',
-  	view: domain + '/goods_categories/view/',
-  	create: domain + '/goods_categories/create',
-  	update: domain + '/goods_categories/update/',
-  	delete: domain + '/goods_categories/delete/',
+    index: domain + '/goods_categories/index',
+    view: domain + '/goods_categories/view/',
+    create: domain + '/goods_categories/create',
+    update: domain + '/goods_categories/update/',
+    delete: domain + '/goods_categories/delete/',
     repeat: domain + '/goods_categories/repeat',
-    all: domain + '/goods_categories/all',
   },
   goods: {
     index: domain + '/goods/index',
@@ -34,7 +33,6 @@ export default {
     create: domain + '/buyers/create',
     update: domain + '/buyers/update/',
     delete: domain + '/buyers/delete/',
-    all: domain + '/buyers/all',
     repeat: domain + '/buyers/repeat',
   },
   orders: {
@@ -47,8 +45,22 @@ export default {
   order_goods: {
     all: domain + '/order_goods/all',
     day: domain + '/order_goods/day',
+    create: domain + '/order_goods/create',
   },
   users: {
     change_password: domain + '/users/change_password/',
+  },
+  order_payments: {
+    day: domain + '/order_payments/day',
+    user_day: domain + '/order_payments/user_day',
+    index: domain + '/order_payments/index',
+    view: domain + '/order_payments/view/',
+    all: domain + '/order_payments/all',
+    buyer_debt: domain + '/order_payments/buyer_debt',
+    buyer_debt_detail: domain + '/order_payments/buyer_debt_detail',
+    repay: domain + '/order_payments/repay',
+  },
+  payments: {
+    all: domain + '/payments/all',
   },
 }

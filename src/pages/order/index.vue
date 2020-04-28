@@ -109,7 +109,8 @@
           pages: 1
         },
         buyer: {},
-        date: ''
+        date: '',
+        pickerOptions: [],
       }
     },
     created () {
