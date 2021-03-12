@@ -13,8 +13,11 @@
             :picker-options="pickerOptions">
           </el-date-picker>
         </h3>
-        <el-col id="myPie" style="min-height: 500px;" :span="17"></el-col>
-        <el-col :span="7">
+        <el-col id="myPie" style="min-height: 500px;" :span="24"></el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="12">
+          <h3>{{$t('messages.title.index.order_goods_day')}}</h3>
           <el-table
             :data="tableData"
             stripe
@@ -44,6 +47,39 @@
             :page-size="pagination.pageSize"
             @current-change="day"
             :total="pagination.count" class="pagination">
+          </el-pagination>
+        </el-col>
+        <el-col :span="12">
+          <h3>{{$t('messages.title.index.goods_logs_day')}}</h3>
+          <el-table
+            :data="goodsLogDayData"
+            stripe
+            style="width: 100%">
+            <el-table-column
+              type="index">
+            </el-table-column>
+            <el-table-column
+              prop="goods_name"
+              :label="$t('messages.column.index.goods_name')">
+            </el-table-column>
+            <el-table-column
+              :label="$t('messages.column.index.total')">
+              <template slot-scope="scope">
+                ￥{{scope.row.total.toFixed(2)}}
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="amount"
+              :label="$t('messages.column.index.amount')">
+            </el-table-column>
+          </el-table>
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :current-page="goodsLogDayDataPagination.page"
+            :page-size="goodsLogDayDataPagination.pageSize"
+            @current-change="goodsLogDay"
+            :total="goodsLogDayDataPagination.count" class="pagination">
           </el-pagination>
         </el-col>
       </el-row>
@@ -170,6 +206,7 @@
       return {
         tableData: [],
         userDayData: [],
+        goodsLogDayData: [],
         orderPaymentDayData: [],
         orderPaymentBuyerDayData: [],
         payments: [],
@@ -180,6 +217,11 @@
           pages: 1
         },
         pagination1: {
+          page: 1,
+          pageSize: 8,
+          pages: 1
+        },
+        goodsLogDayDataPagination: {
           page: 1,
           pageSize: 8,
           pages: 1
@@ -255,6 +297,7 @@
     mounted () {
       this.month()
       this.day()
+      this.goodsLogDay()
       this.orderPaymentDay()
       this.date = new Date()
       this.getPayments()
@@ -314,6 +357,25 @@
           _this.pagination.count = _data.total
           _this.pagination.page = _data.pageNum
           _this.pagination.pageSize = _data.pageSize
+        })
+        .catch(function (error) {
+          _this.$message({
+            type: 'error',
+            message: error.response.data.message
+          })
+        })
+      },
+      goodsLogDay (page) {
+        let _this = this
+        let date = dateformat(_this.date, 'isoDate')
+        _this.axios.get(_this.api.goods_logs.day, {params: {page: page, date: date}})
+        .then(function (response) {
+          let _data = response.data
+          _this.goodsLogDayData = _data.list
+          _this.goodsLogDayDataPagination.pages = _data.pages
+          _this.goodsLogDayDataPagination.count = _data.total
+          _this.goodsLogDayDataPagination.page = _data.pageNum
+          _this.goodsLogDayDataPagination.pageSize = _data.pageSize
         })
         .catch(function (error) {
           _this.$message({

@@ -6,6 +6,8 @@ export const messages = {
     index: {
       month: '年度趋势图',
       day: '日统计',
+      order_goods_day: '日销售',
+      goods_logs_day: '日入库',
       order_payment_day: '支付方式',
       user_day: '用户支付统计'
     },

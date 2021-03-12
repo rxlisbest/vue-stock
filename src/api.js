@@ -25,6 +25,7 @@ export default {
     index: domain + '/goods_logs/index',
     create: domain + '/goods_logs/create',
     delete: domain + '/goods_logs/delete/',
+    day: domain + '/goods_logs/day',
   },
   buyers: {
     all: domain + '/buyers/all',
